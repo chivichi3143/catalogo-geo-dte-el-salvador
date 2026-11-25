@@ -1,0 +1,6332 @@
+{
+  "version_catalogo_interno": "2.1",
+  "version_normativa_dte": "2.0",
+  "fecha_revision": "2026-11-25",
+  "pais": "SV",
+  "fuente_oficial": "https://factura.gob.sv/",
+  "titulo": "Catálogo geográfico DTE El Salvador para desarrolladores",
+  "vigencia": {
+    "normativa": "2.0",
+    "distrito_en_schema": "required en emisor.direccion y receptor.direccion (normativa 2.0)",
+    "obligatoriedad_mh": "2026-12-01",
+    "nota": "Los esquemas DTE anteriores a 2.0 no incluyen el campo distrito. A partir del 1 de diciembre de 2026 Hacienda exige normativa 2.0: departamento (CAT-012) + municipio (CAT-013) + distrito (CAT-008)."
+  },
+  "fuentes": [
+    "Catálogos Facturación Electrónica MH, actualización 1-jul-2026 (CAT-012, CAT-013)",
+    "CAT-008 Distrito / municipio tradicional (códigos de 2 dígitos por departamento)",
+    "JSON Schemas MH normativa 2.0 (Docs/v2/svfe-json-schemas)",
+    "Decreto Legislativo No. 762, Ley Especial para la Reestructuración Municipal (13-jun-2023)",
+    "Decreto Legislativo No. 978 (reforma San Salvador Centro, 19-mar-2024)"
+  ],
+  "catalogos_mh": {
+    "departamento": {
+      "catalogo": "CAT-012",
+      "longitud": 2
+    },
+    "municipio": {
+      "catalogo": "CAT-013",
+      "longitud": 2,
+      "unicidad": "solo dentro del departamento; el mismo código existe en varios departamentos"
+    },
+    "distrito": {
+      "catalogo": "CAT-008",
+      "longitud": 2,
+      "unicidad": "solo dentro del departamento"
+    }
+  },
+  "cabanas_cat013": {
+    "oeste": {
+      "codigo": "10",
+      "nombre": "CABAÑAS OESTE"
+    },
+    "este": {
+      "codigo": "11",
+      "nombre": "CABAÑAS ESTE"
+    },
+    "nota": "Catálogos MH 1-jul-2026: 10 = Oeste, 11 = Este. No invertir. Integraciones de catálogos anteriores (p. ej. Digifact) aún pueden mostrarlos al revés."
+  },
+  "totales": {
+    "departamentos_nacionales": 14,
+    "municipios_cat013_nacionales": 44,
+    "distritos_nacionales": 262,
+    "incluye_codigo_extranjero": true
+  },
+  "uso_dte": {
+    "rutas": {
+      "emisor": {
+        "departamento": "emisor.direccion.departamento",
+        "municipio": "emisor.direccion.municipio",
+        "distrito": "emisor.direccion.distrito",
+        "complemento": "emisor.direccion.complemento"
+      },
+      "receptor": {
+        "departamento": "receptor.direccion.departamento",
+        "municipio": "receptor.direccion.municipio",
+        "distrito": "receptor.direccion.distrito",
+        "complemento": "receptor.direccion.complemento"
+      }
+    },
+    "no_usar": "identificacion.direccion — identificacion no lleva dirección; ahí van version, ambiente, tipoDte, numeroControl, codigoGeneracion, fecEmi, horEmi, tipoMoneda.",
+    "campos_requeridos_schema_20": [
+      "departamento",
+      "municipio",
+      "distrito",
+      "complemento"
+    ],
+    "ejemplo_nacional": {
+      "busqueda": "Soyapango",
+      "objeto": {
+        "direccion": {
+          "departamento": "06",
+          "municipio": "22",
+          "distrito": "17",
+          "complemento": "Dirección del establecimiento"
+        }
+      }
+    },
+    "ejemplo_emisor": {
+      "busqueda": "Izalco",
+      "emisor": {
+        "direccion": {
+          "departamento": "03",
+          "municipio": "19",
+          "distrito": "06",
+          "complemento": "Dirección del establecimiento"
+        }
+      }
+    },
+    "direccion_extranjera": {
+      "cuando": "Receptor fuera de El Salvador en DTE que sí llevan receptor.direccion (01, 03, 04, 05, 06, 07, 08, 09, 14, etc.).",
+      "objeto": {
+        "direccion": {
+          "departamento": "00",
+          "municipio": "00",
+          "distrito": "00",
+          "complemento": "Dirección en el extranjero"
+        }
+      },
+      "catalogos": {
+        "CAT-012": "00 Otro (Para extranjeros)",
+        "CAT-013": "00 Otro (Para extranjeros)",
+        "CAT-008": "00 Otro (Para extranjeros)"
+      },
+      "excepcion_fex": "Factura de exportación (tipoDte 11, fe-fex-v3): el receptor NO usa departamento/municipio/distrito. Usa receptor.codPais, receptor.nombrePais y receptor.complemento. El emisor de un FEX sí usa emisor.direccion nacional (nunca 00)."
+    },
+    "esquemas_normativa_20": {
+      "01": {
+        "schema": "fe-f-v2",
+        "identificacion.version": 2
+      },
+      "03": {
+        "schema": "fe-ccf-v4",
+        "identificacion.version": 4
+      },
+      "04": {
+        "schema": "fe-nr-v4",
+        "identificacion.version": 4
+      },
+      "05": {
+        "schema": "fe-nc-v4",
+        "identificacion.version": 4
+      },
+      "06": {
+        "schema": "fe-nd-v4",
+        "identificacion.version": 4
+      },
+      "07": {
+        "schema": "fe-cr-v2",
+        "identificacion.version": 2
+      },
+      "08": {
+        "schema": "fe-cl-v2",
+        "identificacion.version": 2
+      },
+      "09": {
+        "schema": "fe-dcl-v2",
+        "identificacion.version": 2
+      },
+      "11": {
+        "schema": "fe-fex-v3",
+        "identificacion.version": 3,
+        "receptor_geo": "codPais/nombrePais/complemento"
+      },
+      "14": {
+        "schema": "fe-fse-v2",
+        "identificacion.version": 2
+      }
+    }
+  },
+  "aviso": "Los códigos CAT-013 y CAT-008 solo son únicos dentro del departamento. Siempre envíe departamento + municipio + distrito juntos. Hay nombres de distrito repetidos en distintos departamentos (San Lorenzo, San Isidro, El Rosario, El Carmen, San Fernando); filtre también por departamento. El emisor en El Salvador nunca debe usar 00. El 00 es para receptor.direccion extranjera, no para FEX.",
+  "departamentos": [
+    {
+      "codigo": "00",
+      "nombre": "Otro (Para extranjeros)",
+      "es_extranjero": true,
+      "municipios": [
+        {
+          "codigo": "00",
+          "nombre": "Otro (Para extranjeros)",
+          "es_extranjero": true,
+          "distritos": [
+            {
+              "codigo": "00",
+              "nombre": "Otro (Para extranjeros)",
+              "nombre_catalogo_mh": "Otro (Para extranjeros)",
+              "id": "00-00-00",
+              "es_extranjero": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "codigo": "01",
+      "nombre": "Ahuachapán",
+      "municipios": [
+        {
+          "codigo": "13",
+          "nombre": "AHUACHAPAN NORTE",
+          "distritos": [
+            {
+              "codigo": "03",
+              "nombre": "Atiquizaya",
+              "nombre_catalogo_mh": "ATIQUIZAYA",
+              "id": "01-13-03"
+            },
+            {
+              "codigo": "05",
+              "nombre": "El Refugio",
+              "nombre_catalogo_mh": "EL REFUGIO",
+              "id": "01-13-05"
+            },
+            {
+              "codigo": "09",
+              "nombre": "San Lorenzo",
+              "nombre_catalogo_mh": "SAN LORENZO",
+              "id": "01-13-09"
+            },
+            {
+              "codigo": "12",
+              "nombre": "Turín",
+              "nombre_catalogo_mh": "TURÍN",
+              "id": "01-13-12"
+            }
+          ]
+        },
+        {
+          "codigo": "14",
+          "nombre": "AHUACHAPAN CENTRO",
+          "distritos": [
+            {
+              "codigo": "01",
+              "nombre": "Ahuachapán",
+              "nombre_catalogo_mh": "AHUACHAPÁN",
+              "id": "01-14-01"
+            },
+            {
+              "codigo": "02",
+              "nombre": "Apaneca",
+              "nombre_catalogo_mh": "APANECA",
+              "id": "01-14-02"
+            },
+            {
+              "codigo": "04",
+              "nombre": "Concepción de Ataco",
+              "nombre_catalogo_mh": "CONCEPCIÓN DE ATACO",
+              "id": "01-14-04"
+            },
+            {
+              "codigo": "11",
+              "nombre": "Tacuba",
+              "nombre_catalogo_mh": "TACUBA",
+              "id": "01-14-11"
+            }
+          ]
+        },
+        {
+          "codigo": "15",
+          "nombre": "AHUACHAPAN SUR",
+          "distritos": [
+            {
+              "codigo": "06",
+              "nombre": "Guaymango",
+              "nombre_catalogo_mh": "GUAYMANGO",
+              "id": "01-15-06"
+            },
+            {
+              "codigo": "07",
+              "nombre": "Jujutla",
+              "nombre_catalogo_mh": "JUJUTLA",
+              "id": "01-15-07"
+            },
+            {
+              "codigo": "08",
+              "nombre": "San Francisco Menéndez",
+              "nombre_catalogo_mh": "SAN FRANCISCO MENÉNDEZ",
+              "id": "01-15-08"
+            },
+            {
+              "codigo": "10",
+              "nombre": "San Pedro Puxtla",
+              "nombre_catalogo_mh": "SAN PEDRO PUXTLA",
+              "id": "01-15-10"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "codigo": "02",
+      "nombre": "Santa Ana",
+      "municipios": [
+        {
+          "codigo": "14",
+          "nombre": "SANTA ANA NORTE",
+          "distritos": [
+            {
+              "codigo": "06",
+              "nombre": "Masahuat",
+              "nombre_catalogo_mh": "MASAHUAT",
+              "id": "02-14-06"
+            },
+            {
+              "codigo": "07",
+              "nombre": "Metapán",
+              "nombre_catalogo_mh": "METAPÁN",
+              "id": "02-14-07"
+            },
+            {
+              "codigo": "11",
+              "nombre": "Santa Rosa Guachipilín",
+              "nombre_catalogo_mh": "STA ROSA GUACHI",
+              "id": "02-14-11"
+            },
+            {
+              "codigo": "13",
+              "nombre": "Texistepeque",
+              "nombre_catalogo_mh": "TEXISTEPEQUE",
+              "id": "02-14-13"
+            }
+          ]
+        },
+        {
+          "codigo": "15",
+          "nombre": "SANTA ANA CENTRO",
+          "distritos": [
+            {
+              "codigo": "10",
+              "nombre": "Santa Ana",
+              "nombre_catalogo_mh": "SANTA ANA",
+              "id": "02-15-10"
+            }
+          ]
+        },
+        {
+          "codigo": "16",
+          "nombre": "SANTA ANA ESTE",
+          "distritos": [
+            {
+              "codigo": "02",
+              "nombre": "Coatepeque",
+              "nombre_catalogo_mh": "COATEPEQUE",
+              "id": "02-16-02"
+            },
+            {
+              "codigo": "04",
+              "nombre": "El Congo",
+              "nombre_catalogo_mh": "EL CONGO",
+              "id": "02-16-04"
+            }
+          ]
+        },
+        {
+          "codigo": "17",
+          "nombre": "SANTA ANA OESTE",
+          "distritos": [
+            {
+              "codigo": "01",
+              "nombre": "Candelaria de la Frontera",
+              "nombre_catalogo_mh": "CANDELARIA DE LA FRONTERA",
+              "id": "02-17-01"
+            },
+            {
+              "codigo": "03",
+              "nombre": "Chalchuapa",
+              "nombre_catalogo_mh": "CHALCHUAPA",
+              "id": "02-17-03"
+            },
+            {
+              "codigo": "05",
+              "nombre": "El Porvenir",
+              "nombre_catalogo_mh": "EL PORVENIR",
+              "id": "02-17-05"
+            },
+            {
+              "codigo": "08",
+              "nombre": "San Antonio Pajonal",
+              "nombre_catalogo_mh": "SAN ANTONIO PAJONAL",
+              "id": "02-17-08"
+            },
+            {
+              "codigo": "09",
+              "nombre": "San Sebastián Salitrillo",
+              "nombre_catalogo_mh": "SAN SEBASTIÁN SALITRILLO",
+              "id": "02-17-09"
+            },
+            {
+              "codigo": "12",
+              "nombre": "Santiago de la Frontera",
+              "nombre_catalogo_mh": "STGO D LA FRONT",
+              "id": "02-17-12"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "codigo": "03",
+      "nombre": "Sonsonate",
+      "municipios": [
+        {
+          "codigo": "17",
+          "nombre": "SONSONATE NORTE",
+          "distritos": [
+            {
+              "codigo": "07",
+              "nombre": "Juayúa",
+              "nombre_catalogo_mh": "JUAYÚA",
+              "id": "03-17-07"
+            },
+            {
+              "codigo": "08",
+              "nombre": "Nahuizalco",
+              "nombre_catalogo_mh": "NAHUIZALCO",
+              "id": "03-17-08"
+            },
+            {
+              "codigo": "10",
+              "nombre": "Salcoatitán",
+              "nombre_catalogo_mh": "SALCOATITÁN",
+              "id": "03-17-10"
+            },
+            {
+              "codigo": "13",
+              "nombre": "Santa Catarina Masahuat",
+              "nombre_catalogo_mh": "STA C MASAHUAT",
+              "id": "03-17-13"
+            }
+          ]
+        },
+        {
+          "codigo": "18",
+          "nombre": "SONSONATE CENTRO",
+          "distritos": [
+            {
+              "codigo": "09",
+              "nombre": "Nahulingo",
+              "nombre_catalogo_mh": "NAHULINGO",
+              "id": "03-18-09"
+            },
+            {
+              "codigo": "11",
+              "nombre": "San Antonio del Monte",
+              "nombre_catalogo_mh": "SAN ANTONIO DEL MONTE",
+              "id": "03-18-11"
+            },
+            {
+              "codigo": "14",
+              "nombre": "Santo Domingo de Guzmán",
+              "nombre_catalogo_mh": "SANTO DOMINGO GUZMÁN",
+              "id": "03-18-14"
+            },
+            {
+              "codigo": "15",
+              "nombre": "Sonsonate",
+              "nombre_catalogo_mh": "SONSONATE",
+              "id": "03-18-15"
+            },
+            {
+              "codigo": "16",
+              "nombre": "Sonzacate",
+              "nombre_catalogo_mh": "SONZACATE",
+              "id": "03-18-16"
+            }
+          ]
+        },
+        {
+          "codigo": "19",
+          "nombre": "SONSONATE ESTE",
+          "distritos": [
+            {
+              "codigo": "02",
+              "nombre": "Armenia",
+              "nombre_catalogo_mh": "ARMENIA",
+              "id": "03-19-02"
+            },
+            {
+              "codigo": "03",
+              "nombre": "Caluco",
+              "nombre_catalogo_mh": "CALUCO",
+              "id": "03-19-03"
+            },
+            {
+              "codigo": "04",
+              "nombre": "Cuisnahuat",
+              "nombre_catalogo_mh": "CUISNAHUAT",
+              "id": "03-19-04"
+            },
+            {
+              "codigo": "05",
+              "nombre": "Santa Isabel Ishuatán",
+              "nombre_catalogo_mh": "STA I ISHUATAN",
+              "id": "03-19-05"
+            },
+            {
+              "codigo": "06",
+              "nombre": "Izalco",
+              "nombre_catalogo_mh": "IZALCO",
+              "id": "03-19-06"
+            },
+            {
+              "codigo": "12",
+              "nombre": "San Julián",
+              "nombre_catalogo_mh": "SAN JULIÁN",
+              "id": "03-19-12"
+            }
+          ]
+        },
+        {
+          "codigo": "20",
+          "nombre": "SONSONATE OESTE",
+          "distritos": [
+            {
+              "codigo": "01",
+              "nombre": "Acajutla",
+              "nombre_catalogo_mh": "ACAJUTLA",
+              "id": "03-20-01"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "codigo": "04",
+      "nombre": "Chalatenango",
+      "municipios": [
+        {
+          "codigo": "34",
+          "nombre": "CHALATENANGO NORTE",
+          "distritos": [
+            {
+              "codigo": "04",
+              "nombre": "Citalá",
+              "nombre_catalogo_mh": "CITALÁ",
+              "id": "04-34-04"
+            },
+            {
+              "codigo": "12",
+              "nombre": "La Palma",
+              "nombre_catalogo_mh": "LA PALMA",
+              "id": "04-34-12"
+            },
+            {
+              "codigo": "25",
+              "nombre": "San Ignacio",
+              "nombre_catalogo_mh": "SAN IGNACIO",
+              "id": "04-34-25"
+            }
+          ]
+        },
+        {
+          "codigo": "35",
+          "nombre": "CHALATENANGO CENTRO",
+          "distritos": [
+            {
+              "codigo": "01",
+              "nombre": "Agua Caliente",
+              "nombre_catalogo_mh": "AGUA CALIENTE",
+              "id": "04-35-01"
+            },
+            {
+              "codigo": "08",
+              "nombre": "Dulce Nombre de María",
+              "nombre_catalogo_mh": "DULCE NOM MARÍA",
+              "id": "04-35-08"
+            },
+            {
+              "codigo": "10",
+              "nombre": "El Paraíso",
+              "nombre_catalogo_mh": "EL PARAÍSO",
+              "id": "04-35-10"
+            },
+            {
+              "codigo": "13",
+              "nombre": "La Reina",
+              "nombre_catalogo_mh": "LA REINA",
+              "id": "04-35-13"
+            },
+            {
+              "codigo": "16",
+              "nombre": "Nueva Concepción",
+              "nombre_catalogo_mh": "NVA CONCEPCIÓN",
+              "id": "04-35-16"
+            },
+            {
+              "codigo": "22",
+              "nombre": "San Fernando",
+              "nombre_catalogo_mh": "SAN FERNANDO",
+              "id": "04-35-22"
+            },
+            {
+              "codigo": "24",
+              "nombre": "San Francisco Morazán",
+              "nombre_catalogo_mh": "SAN FRANCISCO MORAZÁN",
+              "id": "04-35-24"
+            },
+            {
+              "codigo": "31",
+              "nombre": "San Rafael",
+              "nombre_catalogo_mh": "SAN RAFAEL",
+              "id": "04-35-31"
+            },
+            {
+              "codigo": "32",
+              "nombre": "Santa Rita",
+              "nombre_catalogo_mh": "SANTA RITA",
+              "id": "04-35-32"
+            },
+            {
+              "codigo": "33",
+              "nombre": "Tejutla",
+              "nombre_catalogo_mh": "TEJUTLA",
+              "id": "04-35-33"
+            }
+          ]
+        },
+        {
+          "codigo": "36",
+          "nombre": "CHALATENANGO SUR",
+          "distritos": [
+            {
+              "codigo": "02",
+              "nombre": "Arcatao",
+              "nombre_catalogo_mh": "ARCATAO",
+              "id": "04-36-02"
+            },
+            {
+              "codigo": "03",
+              "nombre": "Azacualpa",
+              "nombre_catalogo_mh": "AZACUALPA",
+              "id": "04-36-03"
+            },
+            {
+              "codigo": "05",
+              "nombre": "Comalapa",
+              "nombre_catalogo_mh": "COMALAPA",
+              "id": "04-36-05"
+            },
+            {
+              "codigo": "06",
+              "nombre": "Concepción Quezaltepeque",
+              "nombre_catalogo_mh": "CONCEPCIÓN QUEZALTEPEQUE",
+              "id": "04-36-06"
+            },
+            {
+              "codigo": "07",
+              "nombre": "Chalatenango",
+              "nombre_catalogo_mh": "CHALATENANGO",
+              "id": "04-36-07"
+            },
+            {
+              "codigo": "09",
+              "nombre": "El Carrizal",
+              "nombre_catalogo_mh": "EL CARRIZAL",
+              "id": "04-36-09"
+            },
+            {
+              "codigo": "11",
+              "nombre": "La Laguna",
+              "nombre_catalogo_mh": "LA LAGUNA",
+              "id": "04-36-11"
+            },
+            {
+              "codigo": "14",
+              "nombre": "Las Vueltas",
+              "nombre_catalogo_mh": "LAS VUELTAS",
+              "id": "04-36-14"
+            },
+            {
+              "codigo": "15",
+              "nombre": "Nombre de Jesús",
+              "nombre_catalogo_mh": "NOMBRE DE JESUS",
+              "id": "04-36-15"
+            },
+            {
+              "codigo": "17",
+              "nombre": "Nueva Trinidad",
+              "nombre_catalogo_mh": "NUEVA TRINIDAD",
+              "id": "04-36-17"
+            },
+            {
+              "codigo": "18",
+              "nombre": "Ojos de Agua",
+              "nombre_catalogo_mh": "OJOS DE AGUA",
+              "id": "04-36-18"
+            },
+            {
+              "codigo": "19",
+              "nombre": "Potonico",
+              "nombre_catalogo_mh": "POTONICO",
+              "id": "04-36-19"
+            },
+            {
+              "codigo": "20",
+              "nombre": "San Antonio de la Cruz",
+              "nombre_catalogo_mh": "SAN ANT LA CRUZ",
+              "id": "04-36-20"
+            },
+            {
+              "codigo": "21",
+              "nombre": "San Antonio Los Ranchos",
+              "nombre_catalogo_mh": "SAN ANT RANCHOS",
+              "id": "04-36-21"
+            },
+            {
+              "codigo": "23",
+              "nombre": "San Francisco Lempa",
+              "nombre_catalogo_mh": "SAN FRANCISCO LEMPA",
+              "id": "04-36-23"
+            },
+            {
+              "codigo": "26",
+              "nombre": "San Isidro Labrador",
+              "nombre_catalogo_mh": "SAN I LABRADOR",
+              "id": "04-36-26"
+            },
+            {
+              "codigo": "27",
+              "nombre": "San José Cancasque",
+              "nombre_catalogo_mh": "SAN J CANCASQUE",
+              "id": "04-36-27"
+            },
+            {
+              "codigo": "28",
+              "nombre": "San José Las Flores",
+              "nombre_catalogo_mh": "SAN JOSE FLORES",
+              "id": "04-36-28"
+            },
+            {
+              "codigo": "29",
+              "nombre": "San Luis del Carmen",
+              "nombre_catalogo_mh": "SAN LUIS CARMEN",
+              "id": "04-36-29"
+            },
+            {
+              "codigo": "30",
+              "nombre": "San Miguel de Mercedes",
+              "nombre_catalogo_mh": "SN MIG MERCEDES",
+              "id": "04-36-30"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "codigo": "05",
+      "nombre": "La Libertad",
+      "municipios": [
+        {
+          "codigo": "23",
+          "nombre": "LA LIBERTAD NORTE",
+          "distritos": [
+            {
+              "codigo": "12",
+              "nombre": "Quezaltepeque",
+              "nombre_catalogo_mh": "QUEZALTEPEQUE",
+              "id": "05-23-12"
+            },
+            {
+              "codigo": "16",
+              "nombre": "San Matías",
+              "nombre_catalogo_mh": "SAN MATÍAS",
+              "id": "05-23-16"
+            },
+            {
+              "codigo": "17",
+              "nombre": "San Pablo Tacachico",
+              "nombre_catalogo_mh": "SAN P TACACHICO",
+              "id": "05-23-17"
+            }
+          ]
+        },
+        {
+          "codigo": "24",
+          "nombre": "LA LIBERTAD CENTRO",
+          "distritos": [
+            {
+              "codigo": "02",
+              "nombre": "Ciudad Arce",
+              "nombre_catalogo_mh": "CIUDAD ARCE",
+              "id": "05-24-02"
+            },
+            {
+              "codigo": "15",
+              "nombre": "San Juan Opico",
+              "nombre_catalogo_mh": "SAN JUAN OPICO",
+              "id": "05-24-15"
+            }
+          ]
+        },
+        {
+          "codigo": "25",
+          "nombre": "LA LIBERTAD OESTE",
+          "distritos": [
+            {
+              "codigo": "03",
+              "nombre": "Colón",
+              "nombre_catalogo_mh": "COLON",
+              "id": "05-25-03"
+            },
+            {
+              "codigo": "07",
+              "nombre": "Jayaque",
+              "nombre_catalogo_mh": "JAYAQUE",
+              "id": "05-25-07"
+            },
+            {
+              "codigo": "13",
+              "nombre": "Sacacoyo",
+              "nombre_catalogo_mh": "SACACOYO",
+              "id": "05-25-13"
+            },
+            {
+              "codigo": "19",
+              "nombre": "Talnique",
+              "nombre_catalogo_mh": "TALNIQUE",
+              "id": "05-25-19"
+            },
+            {
+              "codigo": "21",
+              "nombre": "Tepecoyo",
+              "nombre_catalogo_mh": "TEPECOYO",
+              "id": "05-25-21"
+            }
+          ]
+        },
+        {
+          "codigo": "26",
+          "nombre": "LA LIBERTAD ESTE",
+          "distritos": [
+            {
+              "codigo": "01",
+              "nombre": "Antiguo Cuscatlán",
+              "nombre_catalogo_mh": "ANTGO CUSCATLÁN",
+              "id": "05-26-01"
+            },
+            {
+              "codigo": "06",
+              "nombre": "Huizúcar",
+              "nombre_catalogo_mh": "HUIZÚCAR",
+              "id": "05-26-06"
+            },
+            {
+              "codigo": "10",
+              "nombre": "Nuevo Cuscatlán",
+              "nombre_catalogo_mh": "NUEVO CUSCATLÁN",
+              "id": "05-26-10"
+            },
+            {
+              "codigo": "14",
+              "nombre": "San José Villanueva",
+              "nombre_catalogo_mh": "SN J VILLANUEVA",
+              "id": "05-26-14"
+            },
+            {
+              "codigo": "22",
+              "nombre": "Zaragoza",
+              "nombre_catalogo_mh": "ZARAGOZA",
+              "id": "05-26-22"
+            }
+          ]
+        },
+        {
+          "codigo": "27",
+          "nombre": "LA LIBERTAD COSTA",
+          "distritos": [
+            {
+              "codigo": "05",
+              "nombre": "Chiltiupán",
+              "nombre_catalogo_mh": "CHILTIUPAN",
+              "id": "05-27-05"
+            },
+            {
+              "codigo": "08",
+              "nombre": "Jicalapa",
+              "nombre_catalogo_mh": "JICALAPA",
+              "id": "05-27-08"
+            },
+            {
+              "codigo": "09",
+              "nombre": "La Libertad",
+              "nombre_catalogo_mh": "LA LIBERTAD",
+              "id": "05-27-09"
+            },
+            {
+              "codigo": "18",
+              "nombre": "Tamanique",
+              "nombre_catalogo_mh": "TAMANIQUE",
+              "id": "05-27-18"
+            },
+            {
+              "codigo": "20",
+              "nombre": "Teotepeque",
+              "nombre_catalogo_mh": "TEOTEPEQUE",
+              "id": "05-27-20"
+            }
+          ]
+        },
+        {
+          "codigo": "28",
+          "nombre": "LA LIBERTAD SUR",
+          "distritos": [
+            {
+              "codigo": "04",
+              "nombre": "Comasagua",
+              "nombre_catalogo_mh": "COMASAGUA",
+              "id": "05-28-04"
+            },
+            {
+              "codigo": "11",
+              "nombre": "Santa Tecla",
+              "nombre_catalogo_mh": "SANTA TECLA",
+              "id": "05-28-11"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "codigo": "06",
+      "nombre": "San Salvador",
+      "municipios": [
+        {
+          "codigo": "20",
+          "nombre": "SAN SALVADOR NORTE",
+          "distritos": [
+            {
+              "codigo": "01",
+              "nombre": "Aguilares",
+              "nombre_catalogo_mh": "AGUILARES",
+              "id": "06-20-01"
+            },
+            {
+              "codigo": "05",
+              "nombre": "El Paisnal",
+              "nombre_catalogo_mh": "EL PAISNAL",
+              "id": "06-20-05"
+            },
+            {
+              "codigo": "06",
+              "nombre": "Guazapa",
+              "nombre_catalogo_mh": "GUAZAPA",
+              "id": "06-20-06"
+            }
+          ]
+        },
+        {
+          "codigo": "21",
+          "nombre": "SAN SALVADOR OESTE",
+          "distritos": [
+            {
+              "codigo": "02",
+              "nombre": "Apopa",
+              "nombre_catalogo_mh": "APOPA",
+              "id": "06-21-02"
+            },
+            {
+              "codigo": "09",
+              "nombre": "Nejapa",
+              "nombre_catalogo_mh": "NEJAPA",
+              "id": "06-21-09"
+            }
+          ]
+        },
+        {
+          "codigo": "22",
+          "nombre": "SAN SALVADOR ESTE",
+          "distritos": [
+            {
+              "codigo": "07",
+              "nombre": "Ilopango",
+              "nombre_catalogo_mh": "ILOPANGO",
+              "id": "06-22-07"
+            },
+            {
+              "codigo": "13",
+              "nombre": "San Martín",
+              "nombre_catalogo_mh": "SAN MARTIN",
+              "id": "06-22-13"
+            },
+            {
+              "codigo": "17",
+              "nombre": "Soyapango",
+              "nombre_catalogo_mh": "SOYAPANGO",
+              "id": "06-22-17"
+            },
+            {
+              "codigo": "18",
+              "nombre": "Tonacatepeque",
+              "nombre_catalogo_mh": "TONACATEPEQUE",
+              "id": "06-22-18"
+            }
+          ]
+        },
+        {
+          "codigo": "23",
+          "nombre": "SAN SALVADOR CENTRO",
+          "distritos": [
+            {
+              "codigo": "03",
+              "nombre": "Ayutuxtepeque",
+              "nombre_catalogo_mh": "AYUTUXTEPEQUE",
+              "id": "06-23-03"
+            },
+            {
+              "codigo": "04",
+              "nombre": "Cuscatancingo",
+              "nombre_catalogo_mh": "CUSCATANCINGO",
+              "id": "06-23-04"
+            },
+            {
+              "codigo": "08",
+              "nombre": "Mejicanos",
+              "nombre_catalogo_mh": "MEJICANOS",
+              "id": "06-23-08"
+            },
+            {
+              "codigo": "14",
+              "nombre": "San Salvador",
+              "nombre_catalogo_mh": "SAN SALVADOR",
+              "id": "06-23-14"
+            },
+            {
+              "codigo": "19",
+              "nombre": "Ciudad Delgado",
+              "nombre_catalogo_mh": "CIUDAD DELGADO",
+              "id": "06-23-19"
+            }
+          ]
+        },
+        {
+          "codigo": "24",
+          "nombre": "SAN SALVADOR SUR",
+          "distritos": [
+            {
+              "codigo": "10",
+              "nombre": "Panchimalco",
+              "nombre_catalogo_mh": "PANCHIMALCO",
+              "id": "06-24-10"
+            },
+            {
+              "codigo": "11",
+              "nombre": "Rosario de Mora",
+              "nombre_catalogo_mh": "ROSARIO DE MORA",
+              "id": "06-24-11"
+            },
+            {
+              "codigo": "12",
+              "nombre": "San Marcos",
+              "nombre_catalogo_mh": "SAN MARCOS",
+              "id": "06-24-12"
+            },
+            {
+              "codigo": "15",
+              "nombre": "Santiago Texacuangos",
+              "nombre_catalogo_mh": "STG TEXACUANGOS",
+              "id": "06-24-15"
+            },
+            {
+              "codigo": "16",
+              "nombre": "Santo Tomás",
+              "nombre_catalogo_mh": "SANTO TOMAS",
+              "id": "06-24-16"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "codigo": "07",
+      "nombre": "Cuscatlán",
+      "municipios": [
+        {
+          "codigo": "17",
+          "nombre": "CUSCATLAN NORTE",
+          "distritos": [
+            {
+              "codigo": "06",
+              "nombre": "Oratorio de Concepción",
+              "nombre_catalogo_mh": "ORAT CONCEPCIÓN",
+              "id": "07-17-06"
+            },
+            {
+              "codigo": "07",
+              "nombre": "San Bartolomé Perulapía",
+              "nombre_catalogo_mh": "SAN B PERULAPIA",
+              "id": "07-17-07"
+            },
+            {
+              "codigo": "09",
+              "nombre": "San José Guayabal",
+              "nombre_catalogo_mh": "SAN J GUAYABAL",
+              "id": "07-17-09"
+            },
+            {
+              "codigo": "10",
+              "nombre": "San Pedro Perulapán",
+              "nombre_catalogo_mh": "SAN P PERULAPÁN",
+              "id": "07-17-10"
+            },
+            {
+              "codigo": "15",
+              "nombre": "Suchitoto",
+              "nombre_catalogo_mh": "SUCHITOTO",
+              "id": "07-17-15"
+            }
+          ]
+        },
+        {
+          "codigo": "18",
+          "nombre": "CUSCATLAN SUR",
+          "distritos": [
+            {
+              "codigo": "01",
+              "nombre": "Candelaria",
+              "nombre_catalogo_mh": "CANDELARIA",
+              "id": "07-18-01"
+            },
+            {
+              "codigo": "02",
+              "nombre": "Cojutepeque",
+              "nombre_catalogo_mh": "COJUTEPEQUE",
+              "id": "07-18-02"
+            },
+            {
+              "codigo": "03",
+              "nombre": "El Carmen",
+              "nombre_catalogo_mh": "EL CARMEN",
+              "id": "07-18-03"
+            },
+            {
+              "codigo": "04",
+              "nombre": "El Rosario",
+              "nombre_catalogo_mh": "EL ROSARIO",
+              "id": "07-18-04"
+            },
+            {
+              "codigo": "05",
+              "nombre": "Monte San Juan",
+              "nombre_catalogo_mh": "MONTE SAN JUAN",
+              "id": "07-18-05"
+            },
+            {
+              "codigo": "08",
+              "nombre": "San Cristóbal",
+              "nombre_catalogo_mh": "SAN CRISTÓBAL",
+              "id": "07-18-08"
+            },
+            {
+              "codigo": "11",
+              "nombre": "San Rafael Cedros",
+              "nombre_catalogo_mh": "SAN RAF CEDROS",
+              "id": "07-18-11"
+            },
+            {
+              "codigo": "12",
+              "nombre": "San Ramón",
+              "nombre_catalogo_mh": "SAN RAMON",
+              "id": "07-18-12"
+            },
+            {
+              "codigo": "13",
+              "nombre": "Santa Cruz Analquito",
+              "nombre_catalogo_mh": "STA C ANALQUITO",
+              "id": "07-18-13"
+            },
+            {
+              "codigo": "14",
+              "nombre": "Santa Cruz Michapa",
+              "nombre_catalogo_mh": "STA C MICHAPA",
+              "id": "07-18-14"
+            },
+            {
+              "codigo": "16",
+              "nombre": "Tenancingo",
+              "nombre_catalogo_mh": "TENANCINGO",
+              "id": "07-18-16"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "codigo": "08",
+      "nombre": "La Paz",
+      "municipios": [
+        {
+          "codigo": "23",
+          "nombre": "LA PAZ OESTE",
+          "distritos": [
+            {
+              "codigo": "01",
+              "nombre": "Cuyultitán",
+              "nombre_catalogo_mh": "CUYULTITÁN",
+              "id": "08-23-01"
+            },
+            {
+              "codigo": "05",
+              "nombre": "Olocuilta",
+              "nombre_catalogo_mh": "OLOCUILTA",
+              "id": "08-23-05"
+            },
+            {
+              "codigo": "09",
+              "nombre": "San Francisco Chinameca",
+              "nombre_catalogo_mh": "SN FCO CHINAMEC",
+              "id": "08-23-09"
+            },
+            {
+              "codigo": "11",
+              "nombre": "San Juan Talpa",
+              "nombre_catalogo_mh": "SAN JUAN TALPA",
+              "id": "08-23-11"
+            },
+            {
+              "codigo": "13",
+              "nombre": "San Luis Talpa",
+              "nombre_catalogo_mh": "SAN LUIS TALPA",
+              "id": "08-23-13"
+            },
+            {
+              "codigo": "15",
+              "nombre": "San Pedro Masahuat",
+              "nombre_catalogo_mh": "SAN PEDRO MASAHUAT",
+              "id": "08-23-15"
+            },
+            {
+              "codigo": "20",
+              "nombre": "Tapalhuaca",
+              "nombre_catalogo_mh": "TAPALHUACA",
+              "id": "08-23-20"
+            }
+          ]
+        },
+        {
+          "codigo": "24",
+          "nombre": "LA PAZ CENTRO",
+          "distritos": [
+            {
+              "codigo": "02",
+              "nombre": "El Rosario",
+              "nombre_catalogo_mh": "EL ROSARIO",
+              "id": "08-24-02"
+            },
+            {
+              "codigo": "03",
+              "nombre": "Jerusalén",
+              "nombre_catalogo_mh": "JERUSALÉN",
+              "id": "08-24-03"
+            },
+            {
+              "codigo": "04",
+              "nombre": "Mercedes La Ceiba",
+              "nombre_catalogo_mh": "MERCED LA CEIBA",
+              "id": "08-24-04"
+            },
+            {
+              "codigo": "06",
+              "nombre": "Paraíso de Osorio",
+              "nombre_catalogo_mh": "PARAÍSO OSORIO",
+              "id": "08-24-06"
+            },
+            {
+              "codigo": "07",
+              "nombre": "San Antonio Masahuat",
+              "nombre_catalogo_mh": "SN ANT MASAHUAT",
+              "id": "08-24-07"
+            },
+            {
+              "codigo": "08",
+              "nombre": "San Emigdio",
+              "nombre_catalogo_mh": "SAN EMIGDIO",
+              "id": "08-24-08"
+            },
+            {
+              "codigo": "12",
+              "nombre": "San Juan Tepezontes",
+              "nombre_catalogo_mh": "SAN JUAN TEPEZONTES",
+              "id": "08-24-12"
+            },
+            {
+              "codigo": "14",
+              "nombre": "San Miguel Tepezontes",
+              "nombre_catalogo_mh": "SAN MIGUEL TEPEZONTES",
+              "id": "08-24-14"
+            },
+            {
+              "codigo": "16",
+              "nombre": "San Pedro Nonualco",
+              "nombre_catalogo_mh": "SAN PEDRO NONUALCO",
+              "id": "08-24-16"
+            },
+            {
+              "codigo": "18",
+              "nombre": "Santa María Ostuma",
+              "nombre_catalogo_mh": "STA MA OSTUMA",
+              "id": "08-24-18"
+            },
+            {
+              "codigo": "19",
+              "nombre": "Santiago Nonualco",
+              "nombre_catalogo_mh": "STGO NONUALCO",
+              "id": "08-24-19"
+            },
+            {
+              "codigo": "22",
+              "nombre": "San Luis La Herradura",
+              "nombre_catalogo_mh": "SN LUIS LA HERR",
+              "id": "08-24-22"
+            }
+          ]
+        },
+        {
+          "codigo": "25",
+          "nombre": "LA PAZ ESTE",
+          "distritos": [
+            {
+              "codigo": "10",
+              "nombre": "San Juan Nonualco",
+              "nombre_catalogo_mh": "SAN J NONUALCO",
+              "id": "08-25-10"
+            },
+            {
+              "codigo": "17",
+              "nombre": "San Rafael Obrajuelo",
+              "nombre_catalogo_mh": "SAN R OBRAJUELO",
+              "id": "08-25-17"
+            },
+            {
+              "codigo": "21",
+              "nombre": "Zacatecoluca",
+              "nombre_catalogo_mh": "ZACATECOLUCA",
+              "id": "08-25-21"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "codigo": "09",
+      "nombre": "Cabañas",
+      "municipios": [
+        {
+          "codigo": "10",
+          "nombre": "CABAÑAS OESTE",
+          "distritos": [
+            {
+              "codigo": "01",
+              "nombre": "Cinquera",
+              "nombre_catalogo_mh": "CINQUERA",
+              "id": "09-10-01"
+            },
+            {
+              "codigo": "03",
+              "nombre": "Ilobasco",
+              "nombre_catalogo_mh": "ILOBASCO",
+              "id": "09-10-03"
+            },
+            {
+              "codigo": "04",
+              "nombre": "Jutiapa",
+              "nombre_catalogo_mh": "JUTIAPA",
+              "id": "09-10-04"
+            },
+            {
+              "codigo": "07",
+              "nombre": "Tejutepeque",
+              "nombre_catalogo_mh": "TEJUTEPEQUE",
+              "id": "09-10-07"
+            }
+          ]
+        },
+        {
+          "codigo": "11",
+          "nombre": "CABAÑAS ESTE",
+          "distritos": [
+            {
+              "codigo": "02",
+              "nombre": "Guacotecti",
+              "nombre_catalogo_mh": "GUACOTECTI",
+              "id": "09-11-02"
+            },
+            {
+              "codigo": "05",
+              "nombre": "San Isidro",
+              "nombre_catalogo_mh": "SAN ISIDRO",
+              "id": "09-11-05"
+            },
+            {
+              "codigo": "06",
+              "nombre": "Sensuntepeque",
+              "nombre_catalogo_mh": "SENSUNTEPEQUE",
+              "id": "09-11-06"
+            },
+            {
+              "codigo": "08",
+              "nombre": "Victoria",
+              "nombre_catalogo_mh": "VICTORIA",
+              "id": "09-11-08"
+            },
+            {
+              "codigo": "09",
+              "nombre": "Dolores",
+              "nombre_catalogo_mh": "DOLORES",
+              "id": "09-11-09"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "codigo": "10",
+      "nombre": "San Vicente",
+      "municipios": [
+        {
+          "codigo": "14",
+          "nombre": "SAN VICENTE NORTE",
+          "distritos": [
+            {
+              "codigo": "01",
+              "nombre": "Apastepeque",
+              "nombre_catalogo_mh": "APASTEPEQUE",
+              "id": "10-14-01"
+            },
+            {
+              "codigo": "04",
+              "nombre": "Santa Clara",
+              "nombre_catalogo_mh": "SANTA CLARA",
+              "id": "10-14-04"
+            },
+            {
+              "codigo": "05",
+              "nombre": "Santo Domingo",
+              "nombre_catalogo_mh": "SANTO DOMINGO",
+              "id": "10-14-05"
+            },
+            {
+              "codigo": "06",
+              "nombre": "San Esteban Catarina",
+              "nombre_catalogo_mh": "SN EST CATARINA",
+              "id": "10-14-06"
+            },
+            {
+              "codigo": "07",
+              "nombre": "San Ildefonso",
+              "nombre_catalogo_mh": "SAN ILDEFONSO",
+              "id": "10-14-07"
+            },
+            {
+              "codigo": "08",
+              "nombre": "San Lorenzo",
+              "nombre_catalogo_mh": "SAN LORENZO",
+              "id": "10-14-08"
+            },
+            {
+              "codigo": "09",
+              "nombre": "San Sebastián",
+              "nombre_catalogo_mh": "SAN SEBASTIÁN",
+              "id": "10-14-09"
+            }
+          ]
+        },
+        {
+          "codigo": "15",
+          "nombre": "SAN VICENTE SUR",
+          "distritos": [
+            {
+              "codigo": "02",
+              "nombre": "Guadalupe",
+              "nombre_catalogo_mh": "GUADALUPE",
+              "id": "10-15-02"
+            },
+            {
+              "codigo": "03",
+              "nombre": "San Cayetano Istepeque",
+              "nombre_catalogo_mh": "SAN CAY ISTEPEQ",
+              "id": "10-15-03"
+            },
+            {
+              "codigo": "10",
+              "nombre": "San Vicente",
+              "nombre_catalogo_mh": "SAN VICENTE",
+              "id": "10-15-10"
+            },
+            {
+              "codigo": "11",
+              "nombre": "Tecoluca",
+              "nombre_catalogo_mh": "TECOLUCA",
+              "id": "10-15-11"
+            },
+            {
+              "codigo": "12",
+              "nombre": "Tepetitán",
+              "nombre_catalogo_mh": "TEPETITÁN",
+              "id": "10-15-12"
+            },
+            {
+              "codigo": "13",
+              "nombre": "Verapaz",
+              "nombre_catalogo_mh": "VERAPAZ",
+              "id": "10-15-13"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "codigo": "11",
+      "nombre": "Usulután",
+      "municipios": [
+        {
+          "codigo": "24",
+          "nombre": "USULUTAN NORTE",
+          "distritos": [
+            {
+              "codigo": "01",
+              "nombre": "Alegría",
+              "nombre_catalogo_mh": "ALEGRÍA",
+              "id": "11-24-01"
+            },
+            {
+              "codigo": "02",
+              "nombre": "Berlín",
+              "nombre_catalogo_mh": "BERLÍN",
+              "id": "11-24-02"
+            },
+            {
+              "codigo": "05",
+              "nombre": "El Triunfo",
+              "nombre_catalogo_mh": "EL TRIUNFO",
+              "id": "11-24-05"
+            },
+            {
+              "codigo": "07",
+              "nombre": "Estanzuelas",
+              "nombre_catalogo_mh": "ESTANZUELAS",
+              "id": "11-24-07"
+            },
+            {
+              "codigo": "09",
+              "nombre": "Jucuapa",
+              "nombre_catalogo_mh": "JUCUAPA",
+              "id": "11-24-09"
+            },
+            {
+              "codigo": "11",
+              "nombre": "Mercedes Umaña",
+              "nombre_catalogo_mh": "MERCEDES UMAÑA",
+              "id": "11-24-11"
+            },
+            {
+              "codigo": "12",
+              "nombre": "Nueva Granada",
+              "nombre_catalogo_mh": "NUEVA GRANADA",
+              "id": "11-24-12"
+            },
+            {
+              "codigo": "16",
+              "nombre": "San Buenaventura",
+              "nombre_catalogo_mh": "SN BUENAVENTURA",
+              "id": "11-24-16"
+            },
+            {
+              "codigo": "21",
+              "nombre": "Santiago de María",
+              "nombre_catalogo_mh": "STGO DE MARÍA",
+              "id": "11-24-21"
+            }
+          ]
+        },
+        {
+          "codigo": "25",
+          "nombre": "USULUTAN ESTE",
+          "distritos": [
+            {
+              "codigo": "03",
+              "nombre": "California",
+              "nombre_catalogo_mh": "CALIFORNIA",
+              "id": "11-25-03"
+            },
+            {
+              "codigo": "04",
+              "nombre": "Concepción Batres",
+              "nombre_catalogo_mh": "CONCEP BATRES",
+              "id": "11-25-04"
+            },
+            {
+              "codigo": "06",
+              "nombre": "Ereguayquín",
+              "nombre_catalogo_mh": "EREGUAYQUÍN",
+              "id": "11-25-06"
+            },
+            {
+              "codigo": "10",
+              "nombre": "Jucuarán",
+              "nombre_catalogo_mh": "JUCUARÁN",
+              "id": "11-25-10"
+            },
+            {
+              "codigo": "13",
+              "nombre": "Ozatlán",
+              "nombre_catalogo_mh": "OZATLÁN",
+              "id": "11-25-13"
+            },
+            {
+              "codigo": "17",
+              "nombre": "San Dionisio",
+              "nombre_catalogo_mh": "SAN DIONISIO",
+              "id": "11-25-17"
+            },
+            {
+              "codigo": "18",
+              "nombre": "Santa Elena",
+              "nombre_catalogo_mh": "SANTA ELENA",
+              "id": "11-25-18"
+            },
+            {
+              "codigo": "20",
+              "nombre": "Santa María",
+              "nombre_catalogo_mh": "SANTA MARÍA",
+              "id": "11-25-20"
+            },
+            {
+              "codigo": "22",
+              "nombre": "Tecapán",
+              "nombre_catalogo_mh": "TECAPÁN",
+              "id": "11-25-22"
+            },
+            {
+              "codigo": "23",
+              "nombre": "Usulután",
+              "nombre_catalogo_mh": "USULUTÁN",
+              "id": "11-25-23"
+            }
+          ]
+        },
+        {
+          "codigo": "26",
+          "nombre": "USULUTAN OESTE",
+          "distritos": [
+            {
+              "codigo": "08",
+              "nombre": "Jiquilisco",
+              "nombre_catalogo_mh": "JIQUILISCO",
+              "id": "11-26-08"
+            },
+            {
+              "codigo": "14",
+              "nombre": "Puerto El Triunfo",
+              "nombre_catalogo_mh": "PTO EL TRIUNFO",
+              "id": "11-26-14"
+            },
+            {
+              "codigo": "15",
+              "nombre": "San Agustín",
+              "nombre_catalogo_mh": "SAN AGUSTÍN",
+              "id": "11-26-15"
+            },
+            {
+              "codigo": "19",
+              "nombre": "San Francisco Javier",
+              "nombre_catalogo_mh": "SAN FCO JAVIER",
+              "id": "11-26-19"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "codigo": "12",
+      "nombre": "San Miguel",
+      "municipios": [
+        {
+          "codigo": "21",
+          "nombre": "SAN MIGUEL NORTE",
+          "distritos": [
+            {
+              "codigo": "01",
+              "nombre": "Carolina",
+              "nombre_catalogo_mh": "CAROLINA",
+              "id": "12-21-01"
+            },
+            {
+              "codigo": "02",
+              "nombre": "Ciudad Barrios",
+              "nombre_catalogo_mh": "CIUDAD BARRIOS",
+              "id": "12-21-02"
+            },
+            {
+              "codigo": "04",
+              "nombre": "Chapeltique",
+              "nombre_catalogo_mh": "CHAPELTIQUE",
+              "id": "12-21-04"
+            },
+            {
+              "codigo": "11",
+              "nombre": "Nuevo Edén de San Juan",
+              "nombre_catalogo_mh": "NVO EDÉN S JUAN",
+              "id": "12-21-11"
+            },
+            {
+              "codigo": "13",
+              "nombre": "San Antonio del Mosco",
+              "nombre_catalogo_mh": "SAN ANT D MOSCO",
+              "id": "12-21-13"
+            },
+            {
+              "codigo": "14",
+              "nombre": "San Gerardo",
+              "nombre_catalogo_mh": "SAN GERARDO",
+              "id": "12-21-14"
+            },
+            {
+              "codigo": "16",
+              "nombre": "San Luis de la Reina",
+              "nombre_catalogo_mh": "SAN LUIS REINA",
+              "id": "12-21-16"
+            },
+            {
+              "codigo": "19",
+              "nombre": "Sesori",
+              "nombre_catalogo_mh": "SESORI",
+              "id": "12-21-19"
+            }
+          ]
+        },
+        {
+          "codigo": "22",
+          "nombre": "SAN MIGUEL CENTRO",
+          "distritos": [
+            {
+              "codigo": "03",
+              "nombre": "Comacarán",
+              "nombre_catalogo_mh": "COMACARÁN",
+              "id": "12-22-03"
+            },
+            {
+              "codigo": "06",
+              "nombre": "Chirilagua",
+              "nombre_catalogo_mh": "CHIRILAGUA",
+              "id": "12-22-06"
+            },
+            {
+              "codigo": "09",
+              "nombre": "Moncagua",
+              "nombre_catalogo_mh": "MONCAGUA",
+              "id": "12-22-09"
+            },
+            {
+              "codigo": "12",
+              "nombre": "Quelepa",
+              "nombre_catalogo_mh": "QUELEPA",
+              "id": "12-22-12"
+            },
+            {
+              "codigo": "17",
+              "nombre": "San Miguel",
+              "nombre_catalogo_mh": "SAN MIGUEL",
+              "id": "12-22-17"
+            },
+            {
+              "codigo": "20",
+              "nombre": "Uluazapa",
+              "nombre_catalogo_mh": "ULUAZAPA",
+              "id": "12-22-20"
+            }
+          ]
+        },
+        {
+          "codigo": "23",
+          "nombre": "SAN MIGUEL OESTE",
+          "distritos": [
+            {
+              "codigo": "05",
+              "nombre": "Chinameca",
+              "nombre_catalogo_mh": "CHINAMECA",
+              "id": "12-23-05"
+            },
+            {
+              "codigo": "07",
+              "nombre": "El Tránsito",
+              "nombre_catalogo_mh": "EL TRANSITO",
+              "id": "12-23-07"
+            },
+            {
+              "codigo": "08",
+              "nombre": "Lolotique",
+              "nombre_catalogo_mh": "LOLOTIQUE",
+              "id": "12-23-08"
+            },
+            {
+              "codigo": "10",
+              "nombre": "Nueva Guadalupe",
+              "nombre_catalogo_mh": "NUEVA GUADALUPE",
+              "id": "12-23-10"
+            },
+            {
+              "codigo": "15",
+              "nombre": "San Jorge",
+              "nombre_catalogo_mh": "SAN JORGE",
+              "id": "12-23-15"
+            },
+            {
+              "codigo": "18",
+              "nombre": "San Rafael Oriente",
+              "nombre_catalogo_mh": "SAN RAF ORIENTE",
+              "id": "12-23-18"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "codigo": "13",
+      "nombre": "Morazán",
+      "municipios": [
+        {
+          "codigo": "27",
+          "nombre": "MORAZAN NORTE",
+          "distritos": [
+            {
+              "codigo": "01",
+              "nombre": "Arambala",
+              "nombre_catalogo_mh": "ARAMBALA",
+              "id": "13-27-01"
+            },
+            {
+              "codigo": "02",
+              "nombre": "Cacaopera",
+              "nombre_catalogo_mh": "CACAOPERA",
+              "id": "13-27-02"
+            },
+            {
+              "codigo": "03",
+              "nombre": "Corinto",
+              "nombre_catalogo_mh": "CORINTO",
+              "id": "13-27-03"
+            },
+            {
+              "codigo": "07",
+              "nombre": "El Rosario",
+              "nombre_catalogo_mh": "EL ROSARIO",
+              "id": "13-27-07"
+            },
+            {
+              "codigo": "10",
+              "nombre": "Joateca",
+              "nombre_catalogo_mh": "JOATECA",
+              "id": "13-27-10"
+            },
+            {
+              "codigo": "11",
+              "nombre": "Jocoaitique",
+              "nombre_catalogo_mh": "JOCOAITIQUE",
+              "id": "13-27-11"
+            },
+            {
+              "codigo": "14",
+              "nombre": "Meanguera",
+              "nombre_catalogo_mh": "MEANGUERA",
+              "id": "13-27-14"
+            },
+            {
+              "codigo": "16",
+              "nombre": "Perquín",
+              "nombre_catalogo_mh": "PERQUÍN",
+              "id": "13-27-16"
+            },
+            {
+              "codigo": "18",
+              "nombre": "San Fernando",
+              "nombre_catalogo_mh": "SAN FERNANDO",
+              "id": "13-27-18"
+            },
+            {
+              "codigo": "20",
+              "nombre": "San Isidro",
+              "nombre_catalogo_mh": "SAN ISIDRO",
+              "id": "13-27-20"
+            },
+            {
+              "codigo": "24",
+              "nombre": "Torola",
+              "nombre_catalogo_mh": "TOROLA",
+              "id": "13-27-24"
+            }
+          ]
+        },
+        {
+          "codigo": "28",
+          "nombre": "MORAZAN SUR",
+          "distritos": [
+            {
+              "codigo": "04",
+              "nombre": "Chilanga",
+              "nombre_catalogo_mh": "CHILANGA",
+              "id": "13-28-04"
+            },
+            {
+              "codigo": "05",
+              "nombre": "Delicias de Concepción",
+              "nombre_catalogo_mh": "DELIC DE CONCEP",
+              "id": "13-28-05"
+            },
+            {
+              "codigo": "06",
+              "nombre": "El Divisadero",
+              "nombre_catalogo_mh": "EL DIVISADERO",
+              "id": "13-28-06"
+            },
+            {
+              "codigo": "08",
+              "nombre": "Gualococti",
+              "nombre_catalogo_mh": "GUALOCOCTI",
+              "id": "13-28-08"
+            },
+            {
+              "codigo": "09",
+              "nombre": "Guatajiagua",
+              "nombre_catalogo_mh": "GUATAJIAGUA",
+              "id": "13-28-09"
+            },
+            {
+              "codigo": "12",
+              "nombre": "Jocoro",
+              "nombre_catalogo_mh": "JOCORO",
+              "id": "13-28-12"
+            },
+            {
+              "codigo": "13",
+              "nombre": "Lolotiquillo",
+              "nombre_catalogo_mh": "LOLOTIQUILLO",
+              "id": "13-28-13"
+            },
+            {
+              "codigo": "15",
+              "nombre": "Osicala",
+              "nombre_catalogo_mh": "OSICALA",
+              "id": "13-28-15"
+            },
+            {
+              "codigo": "17",
+              "nombre": "San Carlos",
+              "nombre_catalogo_mh": "SAN CARLOS",
+              "id": "13-28-17"
+            },
+            {
+              "codigo": "19",
+              "nombre": "San Francisco Gotera",
+              "nombre_catalogo_mh": "SAN FCO GOTERA",
+              "id": "13-28-19"
+            },
+            {
+              "codigo": "21",
+              "nombre": "San Simón",
+              "nombre_catalogo_mh": "SAN SIMÓN",
+              "id": "13-28-21"
+            },
+            {
+              "codigo": "22",
+              "nombre": "Sensembra",
+              "nombre_catalogo_mh": "SENSEMBRA",
+              "id": "13-28-22"
+            },
+            {
+              "codigo": "23",
+              "nombre": "Sociedad",
+              "nombre_catalogo_mh": "SOCIEDAD",
+              "id": "13-28-23"
+            },
+            {
+              "codigo": "25",
+              "nombre": "Yamabal",
+              "nombre_catalogo_mh": "YAMABAL",
+              "id": "13-28-25"
+            },
+            {
+              "codigo": "26",
+              "nombre": "Yoloaiquín",
+              "nombre_catalogo_mh": "YOLOAIQUÍN",
+              "id": "13-28-26"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "codigo": "14",
+      "nombre": "La Unión",
+      "municipios": [
+        {
+          "codigo": "19",
+          "nombre": "LA UNION NORTE",
+          "distritos": [
+            {
+              "codigo": "01",
+              "nombre": "Anamorós",
+              "nombre_catalogo_mh": "ANAMOROS",
+              "id": "14-19-01"
+            },
+            {
+              "codigo": "02",
+              "nombre": "Bolívar",
+              "nombre_catalogo_mh": "BOLÍVAR",
+              "id": "14-19-02"
+            },
+            {
+              "codigo": "03",
+              "nombre": "Concepción de Oriente",
+              "nombre_catalogo_mh": "CONCEP DE OTE",
+              "id": "14-19-03"
+            },
+            {
+              "codigo": "06",
+              "nombre": "El Sauce",
+              "nombre_catalogo_mh": "EL SAUCE",
+              "id": "14-19-06"
+            },
+            {
+              "codigo": "09",
+              "nombre": "Lislique",
+              "nombre_catalogo_mh": "LISLIQUE",
+              "id": "14-19-09"
+            },
+            {
+              "codigo": "11",
+              "nombre": "Nueva Esparta",
+              "nombre_catalogo_mh": "NUEVA ESPARTA",
+              "id": "14-19-11"
+            },
+            {
+              "codigo": "12",
+              "nombre": "Pasaquina",
+              "nombre_catalogo_mh": "PASAQUINA",
+              "id": "14-19-12"
+            },
+            {
+              "codigo": "13",
+              "nombre": "Polorós",
+              "nombre_catalogo_mh": "POLORÓS",
+              "id": "14-19-13"
+            },
+            {
+              "codigo": "15",
+              "nombre": "San José La Fuente",
+              "nombre_catalogo_mh": "SAN JOSE",
+              "id": "14-19-15"
+            },
+            {
+              "codigo": "16",
+              "nombre": "Santa Rosa de Lima",
+              "nombre_catalogo_mh": "SANTA ROSA LIMA",
+              "id": "14-19-16"
+            }
+          ]
+        },
+        {
+          "codigo": "20",
+          "nombre": "LA UNION SUR",
+          "distritos": [
+            {
+              "codigo": "04",
+              "nombre": "Conchagua",
+              "nombre_catalogo_mh": "CONCHAGUA",
+              "id": "14-20-04"
+            },
+            {
+              "codigo": "05",
+              "nombre": "El Carmen",
+              "nombre_catalogo_mh": "EL CARMEN",
+              "id": "14-20-05"
+            },
+            {
+              "codigo": "07",
+              "nombre": "Intipucá",
+              "nombre_catalogo_mh": "INTIPUCÁ",
+              "id": "14-20-07"
+            },
+            {
+              "codigo": "08",
+              "nombre": "La Unión",
+              "nombre_catalogo_mh": "LA UNIÓN",
+              "id": "14-20-08"
+            },
+            {
+              "codigo": "10",
+              "nombre": "Meanguera del Golfo",
+              "nombre_catalogo_mh": "MEANG DEL GOLFO",
+              "id": "14-20-10"
+            },
+            {
+              "codigo": "14",
+              "nombre": "San Alejo",
+              "nombre_catalogo_mh": "SAN ALEJO",
+              "id": "14-20-14"
+            },
+            {
+              "codigo": "17",
+              "nombre": "Yayantique",
+              "nombre_catalogo_mh": "YAYANTIQUE",
+              "id": "14-20-17"
+            },
+            {
+              "codigo": "18",
+              "nombre": "Yucuaiquín",
+              "nombre_catalogo_mh": "YUCUAIQUÍN",
+              "id": "14-20-18"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "indice_por_nombre": [
+    {
+      "nombre": "Otro (Para extranjeros)",
+      "aliases": [
+        "Extranjero",
+        "Fuera de El Salvador",
+        "Otro"
+      ],
+      "departamento_codigo": "00",
+      "departamento_nombre": "Otro (Para extranjeros)",
+      "municipio_codigo": "00",
+      "municipio_nombre": "Otro (Para extranjeros)",
+      "distrito_codigo": "00",
+      "distrito_nombre": "Otro (Para extranjeros)",
+      "id": "00-00-00",
+      "es_extranjero": true,
+      "dte": {
+        "departamento": "00",
+        "municipio": "00",
+        "distrito": "00"
+      }
+    },
+    {
+      "nombre": "Acajutla",
+      "aliases": [],
+      "departamento_codigo": "03",
+      "departamento_nombre": "Sonsonate",
+      "municipio_codigo": "20",
+      "municipio_nombre": "SONSONATE OESTE",
+      "distrito_codigo": "01",
+      "distrito_nombre": "Acajutla",
+      "id": "03-20-01",
+      "dte": {
+        "departamento": "03",
+        "municipio": "20",
+        "distrito": "01"
+      }
+    },
+    {
+      "nombre": "Agua Caliente",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "35",
+      "municipio_nombre": "CHALATENANGO CENTRO",
+      "distrito_codigo": "01",
+      "distrito_nombre": "Agua Caliente",
+      "id": "04-35-01",
+      "dte": {
+        "departamento": "04",
+        "municipio": "35",
+        "distrito": "01"
+      }
+    },
+    {
+      "nombre": "Aguilares",
+      "aliases": [],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "20",
+      "municipio_nombre": "SAN SALVADOR NORTE",
+      "distrito_codigo": "01",
+      "distrito_nombre": "Aguilares",
+      "id": "06-20-01",
+      "dte": {
+        "departamento": "06",
+        "municipio": "20",
+        "distrito": "01"
+      }
+    },
+    {
+      "nombre": "Ahuachapán",
+      "aliases": [],
+      "departamento_codigo": "01",
+      "departamento_nombre": "Ahuachapán",
+      "municipio_codigo": "14",
+      "municipio_nombre": "AHUACHAPAN CENTRO",
+      "distrito_codigo": "01",
+      "distrito_nombre": "Ahuachapán",
+      "id": "01-14-01",
+      "dte": {
+        "departamento": "01",
+        "municipio": "14",
+        "distrito": "01"
+      }
+    },
+    {
+      "nombre": "Alegría",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "24",
+      "municipio_nombre": "USULUTAN NORTE",
+      "distrito_codigo": "01",
+      "distrito_nombre": "Alegría",
+      "id": "11-24-01",
+      "dte": {
+        "departamento": "11",
+        "municipio": "24",
+        "distrito": "01"
+      }
+    },
+    {
+      "nombre": "Anamorós",
+      "aliases": [],
+      "departamento_codigo": "14",
+      "departamento_nombre": "La Unión",
+      "municipio_codigo": "19",
+      "municipio_nombre": "LA UNION NORTE",
+      "distrito_codigo": "01",
+      "distrito_nombre": "Anamorós",
+      "id": "14-19-01",
+      "dte": {
+        "departamento": "14",
+        "municipio": "19",
+        "distrito": "01"
+      }
+    },
+    {
+      "nombre": "Antiguo Cuscatlán",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "26",
+      "municipio_nombre": "LA LIBERTAD ESTE",
+      "distrito_codigo": "01",
+      "distrito_nombre": "Antiguo Cuscatlán",
+      "id": "05-26-01",
+      "dte": {
+        "departamento": "05",
+        "municipio": "26",
+        "distrito": "01"
+      }
+    },
+    {
+      "nombre": "Apaneca",
+      "aliases": [],
+      "departamento_codigo": "01",
+      "departamento_nombre": "Ahuachapán",
+      "municipio_codigo": "14",
+      "municipio_nombre": "AHUACHAPAN CENTRO",
+      "distrito_codigo": "02",
+      "distrito_nombre": "Apaneca",
+      "id": "01-14-02",
+      "dte": {
+        "departamento": "01",
+        "municipio": "14",
+        "distrito": "02"
+      }
+    },
+    {
+      "nombre": "Apastepeque",
+      "aliases": [],
+      "departamento_codigo": "10",
+      "departamento_nombre": "San Vicente",
+      "municipio_codigo": "14",
+      "municipio_nombre": "SAN VICENTE NORTE",
+      "distrito_codigo": "01",
+      "distrito_nombre": "Apastepeque",
+      "id": "10-14-01",
+      "dte": {
+        "departamento": "10",
+        "municipio": "14",
+        "distrito": "01"
+      }
+    },
+    {
+      "nombre": "Apopa",
+      "aliases": [],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "21",
+      "municipio_nombre": "SAN SALVADOR OESTE",
+      "distrito_codigo": "02",
+      "distrito_nombre": "Apopa",
+      "id": "06-21-02",
+      "dte": {
+        "departamento": "06",
+        "municipio": "21",
+        "distrito": "02"
+      }
+    },
+    {
+      "nombre": "Arambala",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "27",
+      "municipio_nombre": "MORAZAN NORTE",
+      "distrito_codigo": "01",
+      "distrito_nombre": "Arambala",
+      "id": "13-27-01",
+      "dte": {
+        "departamento": "13",
+        "municipio": "27",
+        "distrito": "01"
+      }
+    },
+    {
+      "nombre": "Arcatao",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "02",
+      "distrito_nombre": "Arcatao",
+      "id": "04-36-02",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "02"
+      }
+    },
+    {
+      "nombre": "Armenia",
+      "aliases": [],
+      "departamento_codigo": "03",
+      "departamento_nombre": "Sonsonate",
+      "municipio_codigo": "19",
+      "municipio_nombre": "SONSONATE ESTE",
+      "distrito_codigo": "02",
+      "distrito_nombre": "Armenia",
+      "id": "03-19-02",
+      "dte": {
+        "departamento": "03",
+        "municipio": "19",
+        "distrito": "02"
+      }
+    },
+    {
+      "nombre": "Atiquizaya",
+      "aliases": [],
+      "departamento_codigo": "01",
+      "departamento_nombre": "Ahuachapán",
+      "municipio_codigo": "13",
+      "municipio_nombre": "AHUACHAPAN NORTE",
+      "distrito_codigo": "03",
+      "distrito_nombre": "Atiquizaya",
+      "id": "01-13-03",
+      "dte": {
+        "departamento": "01",
+        "municipio": "13",
+        "distrito": "03"
+      }
+    },
+    {
+      "nombre": "Ayutuxtepeque",
+      "aliases": [],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "23",
+      "municipio_nombre": "SAN SALVADOR CENTRO",
+      "distrito_codigo": "03",
+      "distrito_nombre": "Ayutuxtepeque",
+      "id": "06-23-03",
+      "dte": {
+        "departamento": "06",
+        "municipio": "23",
+        "distrito": "03"
+      }
+    },
+    {
+      "nombre": "Azacualpa",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "03",
+      "distrito_nombre": "Azacualpa",
+      "id": "04-36-03",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "03"
+      }
+    },
+    {
+      "nombre": "Berlín",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "24",
+      "municipio_nombre": "USULUTAN NORTE",
+      "distrito_codigo": "02",
+      "distrito_nombre": "Berlín",
+      "id": "11-24-02",
+      "dte": {
+        "departamento": "11",
+        "municipio": "24",
+        "distrito": "02"
+      }
+    },
+    {
+      "nombre": "Bolívar",
+      "aliases": [],
+      "departamento_codigo": "14",
+      "departamento_nombre": "La Unión",
+      "municipio_codigo": "19",
+      "municipio_nombre": "LA UNION NORTE",
+      "distrito_codigo": "02",
+      "distrito_nombre": "Bolívar",
+      "id": "14-19-02",
+      "dte": {
+        "departamento": "14",
+        "municipio": "19",
+        "distrito": "02"
+      }
+    },
+    {
+      "nombre": "Cacaopera",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "27",
+      "municipio_nombre": "MORAZAN NORTE",
+      "distrito_codigo": "02",
+      "distrito_nombre": "Cacaopera",
+      "id": "13-27-02",
+      "dte": {
+        "departamento": "13",
+        "municipio": "27",
+        "distrito": "02"
+      }
+    },
+    {
+      "nombre": "California",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "25",
+      "municipio_nombre": "USULUTAN ESTE",
+      "distrito_codigo": "03",
+      "distrito_nombre": "California",
+      "id": "11-25-03",
+      "dte": {
+        "departamento": "11",
+        "municipio": "25",
+        "distrito": "03"
+      }
+    },
+    {
+      "nombre": "Caluco",
+      "aliases": [],
+      "departamento_codigo": "03",
+      "departamento_nombre": "Sonsonate",
+      "municipio_codigo": "19",
+      "municipio_nombre": "SONSONATE ESTE",
+      "distrito_codigo": "03",
+      "distrito_nombre": "Caluco",
+      "id": "03-19-03",
+      "dte": {
+        "departamento": "03",
+        "municipio": "19",
+        "distrito": "03"
+      }
+    },
+    {
+      "nombre": "Candelaria",
+      "aliases": [],
+      "departamento_codigo": "07",
+      "departamento_nombre": "Cuscatlán",
+      "municipio_codigo": "18",
+      "municipio_nombre": "CUSCATLAN SUR",
+      "distrito_codigo": "01",
+      "distrito_nombre": "Candelaria",
+      "id": "07-18-01",
+      "dte": {
+        "departamento": "07",
+        "municipio": "18",
+        "distrito": "01"
+      }
+    },
+    {
+      "nombre": "Candelaria de la Frontera",
+      "aliases": [],
+      "departamento_codigo": "02",
+      "departamento_nombre": "Santa Ana",
+      "municipio_codigo": "17",
+      "municipio_nombre": "SANTA ANA OESTE",
+      "distrito_codigo": "01",
+      "distrito_nombre": "Candelaria de la Frontera",
+      "id": "02-17-01",
+      "dte": {
+        "departamento": "02",
+        "municipio": "17",
+        "distrito": "01"
+      }
+    },
+    {
+      "nombre": "El Carmen",
+      "aliases": [],
+      "departamento_codigo": "07",
+      "departamento_nombre": "Cuscatlán",
+      "municipio_codigo": "18",
+      "municipio_nombre": "CUSCATLAN SUR",
+      "distrito_codigo": "03",
+      "distrito_nombre": "El Carmen",
+      "id": "07-18-03",
+      "dte": {
+        "departamento": "07",
+        "municipio": "18",
+        "distrito": "03"
+      }
+    },
+    {
+      "nombre": "El Carmen",
+      "aliases": [],
+      "departamento_codigo": "14",
+      "departamento_nombre": "La Unión",
+      "municipio_codigo": "20",
+      "municipio_nombre": "LA UNION SUR",
+      "distrito_codigo": "05",
+      "distrito_nombre": "El Carmen",
+      "id": "14-20-05",
+      "dte": {
+        "departamento": "14",
+        "municipio": "20",
+        "distrito": "05"
+      }
+    },
+    {
+      "nombre": "Carolina",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "21",
+      "municipio_nombre": "SAN MIGUEL NORTE",
+      "distrito_codigo": "01",
+      "distrito_nombre": "Carolina",
+      "id": "12-21-01",
+      "dte": {
+        "departamento": "12",
+        "municipio": "21",
+        "distrito": "01"
+      }
+    },
+    {
+      "nombre": "El Carrizal",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "09",
+      "distrito_nombre": "El Carrizal",
+      "id": "04-36-09",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "09"
+      }
+    },
+    {
+      "nombre": "Chalatenango",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "07",
+      "distrito_nombre": "Chalatenango",
+      "id": "04-36-07",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "07"
+      }
+    },
+    {
+      "nombre": "Chalchuapa",
+      "aliases": [],
+      "departamento_codigo": "02",
+      "departamento_nombre": "Santa Ana",
+      "municipio_codigo": "17",
+      "municipio_nombre": "SANTA ANA OESTE",
+      "distrito_codigo": "03",
+      "distrito_nombre": "Chalchuapa",
+      "id": "02-17-03",
+      "dte": {
+        "departamento": "02",
+        "municipio": "17",
+        "distrito": "03"
+      }
+    },
+    {
+      "nombre": "Chapeltique",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "21",
+      "municipio_nombre": "SAN MIGUEL NORTE",
+      "distrito_codigo": "04",
+      "distrito_nombre": "Chapeltique",
+      "id": "12-21-04",
+      "dte": {
+        "departamento": "12",
+        "municipio": "21",
+        "distrito": "04"
+      }
+    },
+    {
+      "nombre": "Chilanga",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "28",
+      "municipio_nombre": "MORAZAN SUR",
+      "distrito_codigo": "04",
+      "distrito_nombre": "Chilanga",
+      "id": "13-28-04",
+      "dte": {
+        "departamento": "13",
+        "municipio": "28",
+        "distrito": "04"
+      }
+    },
+    {
+      "nombre": "Chiltiupán",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "27",
+      "municipio_nombre": "LA LIBERTAD COSTA",
+      "distrito_codigo": "05",
+      "distrito_nombre": "Chiltiupán",
+      "id": "05-27-05",
+      "dte": {
+        "departamento": "05",
+        "municipio": "27",
+        "distrito": "05"
+      }
+    },
+    {
+      "nombre": "Chinameca",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "23",
+      "municipio_nombre": "SAN MIGUEL OESTE",
+      "distrito_codigo": "05",
+      "distrito_nombre": "Chinameca",
+      "id": "12-23-05",
+      "dte": {
+        "departamento": "12",
+        "municipio": "23",
+        "distrito": "05"
+      }
+    },
+    {
+      "nombre": "Chirilagua",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "22",
+      "municipio_nombre": "SAN MIGUEL CENTRO",
+      "distrito_codigo": "06",
+      "distrito_nombre": "Chirilagua",
+      "id": "12-22-06",
+      "dte": {
+        "departamento": "12",
+        "municipio": "22",
+        "distrito": "06"
+      }
+    },
+    {
+      "nombre": "Cinquera",
+      "aliases": [],
+      "departamento_codigo": "09",
+      "departamento_nombre": "Cabañas",
+      "municipio_codigo": "10",
+      "municipio_nombre": "CABAÑAS OESTE",
+      "distrito_codigo": "01",
+      "distrito_nombre": "Cinquera",
+      "id": "09-10-01",
+      "dte": {
+        "departamento": "09",
+        "municipio": "10",
+        "distrito": "01"
+      }
+    },
+    {
+      "nombre": "Citalá",
+      "aliases": [
+        "Citalala",
+        "Citala"
+      ],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "34",
+      "municipio_nombre": "CHALATENANGO NORTE",
+      "distrito_codigo": "04",
+      "distrito_nombre": "Citalá",
+      "id": "04-34-04",
+      "dte": {
+        "departamento": "04",
+        "municipio": "34",
+        "distrito": "04"
+      }
+    },
+    {
+      "nombre": "Ciudad Arce",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "24",
+      "municipio_nombre": "LA LIBERTAD CENTRO",
+      "distrito_codigo": "02",
+      "distrito_nombre": "Ciudad Arce",
+      "id": "05-24-02",
+      "dte": {
+        "departamento": "05",
+        "municipio": "24",
+        "distrito": "02"
+      }
+    },
+    {
+      "nombre": "Ciudad Barrios",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "21",
+      "municipio_nombre": "SAN MIGUEL NORTE",
+      "distrito_codigo": "02",
+      "distrito_nombre": "Ciudad Barrios",
+      "id": "12-21-02",
+      "dte": {
+        "departamento": "12",
+        "municipio": "21",
+        "distrito": "02"
+      }
+    },
+    {
+      "nombre": "Ciudad Delgado",
+      "aliases": [],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "23",
+      "municipio_nombre": "SAN SALVADOR CENTRO",
+      "distrito_codigo": "19",
+      "distrito_nombre": "Ciudad Delgado",
+      "id": "06-23-19",
+      "dte": {
+        "departamento": "06",
+        "municipio": "23",
+        "distrito": "19"
+      }
+    },
+    {
+      "nombre": "Coatepeque",
+      "aliases": [],
+      "departamento_codigo": "02",
+      "departamento_nombre": "Santa Ana",
+      "municipio_codigo": "16",
+      "municipio_nombre": "SANTA ANA ESTE",
+      "distrito_codigo": "02",
+      "distrito_nombre": "Coatepeque",
+      "id": "02-16-02",
+      "dte": {
+        "departamento": "02",
+        "municipio": "16",
+        "distrito": "02"
+      }
+    },
+    {
+      "nombre": "Cojutepeque",
+      "aliases": [],
+      "departamento_codigo": "07",
+      "departamento_nombre": "Cuscatlán",
+      "municipio_codigo": "18",
+      "municipio_nombre": "CUSCATLAN SUR",
+      "distrito_codigo": "02",
+      "distrito_nombre": "Cojutepeque",
+      "id": "07-18-02",
+      "dte": {
+        "departamento": "07",
+        "municipio": "18",
+        "distrito": "02"
+      }
+    },
+    {
+      "nombre": "Colón",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "25",
+      "municipio_nombre": "LA LIBERTAD OESTE",
+      "distrito_codigo": "03",
+      "distrito_nombre": "Colón",
+      "id": "05-25-03",
+      "dte": {
+        "departamento": "05",
+        "municipio": "25",
+        "distrito": "03"
+      }
+    },
+    {
+      "nombre": "Comacarán",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "22",
+      "municipio_nombre": "SAN MIGUEL CENTRO",
+      "distrito_codigo": "03",
+      "distrito_nombre": "Comacarán",
+      "id": "12-22-03",
+      "dte": {
+        "departamento": "12",
+        "municipio": "22",
+        "distrito": "03"
+      }
+    },
+    {
+      "nombre": "Comalapa",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "05",
+      "distrito_nombre": "Comalapa",
+      "id": "04-36-05",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "05"
+      }
+    },
+    {
+      "nombre": "Comasagua",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "28",
+      "municipio_nombre": "LA LIBERTAD SUR",
+      "distrito_codigo": "04",
+      "distrito_nombre": "Comasagua",
+      "id": "05-28-04",
+      "dte": {
+        "departamento": "05",
+        "municipio": "28",
+        "distrito": "04"
+      }
+    },
+    {
+      "nombre": "Concepción de Ataco",
+      "aliases": [],
+      "departamento_codigo": "01",
+      "departamento_nombre": "Ahuachapán",
+      "municipio_codigo": "14",
+      "municipio_nombre": "AHUACHAPAN CENTRO",
+      "distrito_codigo": "04",
+      "distrito_nombre": "Concepción de Ataco",
+      "id": "01-14-04",
+      "dte": {
+        "departamento": "01",
+        "municipio": "14",
+        "distrito": "04"
+      }
+    },
+    {
+      "nombre": "Concepción Batres",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "25",
+      "municipio_nombre": "USULUTAN ESTE",
+      "distrito_codigo": "04",
+      "distrito_nombre": "Concepción Batres",
+      "id": "11-25-04",
+      "dte": {
+        "departamento": "11",
+        "municipio": "25",
+        "distrito": "04"
+      }
+    },
+    {
+      "nombre": "Concepción de Oriente",
+      "aliases": [],
+      "departamento_codigo": "14",
+      "departamento_nombre": "La Unión",
+      "municipio_codigo": "19",
+      "municipio_nombre": "LA UNION NORTE",
+      "distrito_codigo": "03",
+      "distrito_nombre": "Concepción de Oriente",
+      "id": "14-19-03",
+      "dte": {
+        "departamento": "14",
+        "municipio": "19",
+        "distrito": "03"
+      }
+    },
+    {
+      "nombre": "Concepción Quezaltepeque",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "06",
+      "distrito_nombre": "Concepción Quezaltepeque",
+      "id": "04-36-06",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "06"
+      }
+    },
+    {
+      "nombre": "Conchagua",
+      "aliases": [],
+      "departamento_codigo": "14",
+      "departamento_nombre": "La Unión",
+      "municipio_codigo": "20",
+      "municipio_nombre": "LA UNION SUR",
+      "distrito_codigo": "04",
+      "distrito_nombre": "Conchagua",
+      "id": "14-20-04",
+      "dte": {
+        "departamento": "14",
+        "municipio": "20",
+        "distrito": "04"
+      }
+    },
+    {
+      "nombre": "El Congo",
+      "aliases": [],
+      "departamento_codigo": "02",
+      "departamento_nombre": "Santa Ana",
+      "municipio_codigo": "16",
+      "municipio_nombre": "SANTA ANA ESTE",
+      "distrito_codigo": "04",
+      "distrito_nombre": "El Congo",
+      "id": "02-16-04",
+      "dte": {
+        "departamento": "02",
+        "municipio": "16",
+        "distrito": "04"
+      }
+    },
+    {
+      "nombre": "Corinto",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "27",
+      "municipio_nombre": "MORAZAN NORTE",
+      "distrito_codigo": "03",
+      "distrito_nombre": "Corinto",
+      "id": "13-27-03",
+      "dte": {
+        "departamento": "13",
+        "municipio": "27",
+        "distrito": "03"
+      }
+    },
+    {
+      "nombre": "Cuisnahuat",
+      "aliases": [],
+      "departamento_codigo": "03",
+      "departamento_nombre": "Sonsonate",
+      "municipio_codigo": "19",
+      "municipio_nombre": "SONSONATE ESTE",
+      "distrito_codigo": "04",
+      "distrito_nombre": "Cuisnahuat",
+      "id": "03-19-04",
+      "dte": {
+        "departamento": "03",
+        "municipio": "19",
+        "distrito": "04"
+      }
+    },
+    {
+      "nombre": "Cuscatancingo",
+      "aliases": [],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "23",
+      "municipio_nombre": "SAN SALVADOR CENTRO",
+      "distrito_codigo": "04",
+      "distrito_nombre": "Cuscatancingo",
+      "id": "06-23-04",
+      "dte": {
+        "departamento": "06",
+        "municipio": "23",
+        "distrito": "04"
+      }
+    },
+    {
+      "nombre": "Cuyultitán",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "23",
+      "municipio_nombre": "LA PAZ OESTE",
+      "distrito_codigo": "01",
+      "distrito_nombre": "Cuyultitán",
+      "id": "08-23-01",
+      "dte": {
+        "departamento": "08",
+        "municipio": "23",
+        "distrito": "01"
+      }
+    },
+    {
+      "nombre": "Delicias de Concepción",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "28",
+      "municipio_nombre": "MORAZAN SUR",
+      "distrito_codigo": "05",
+      "distrito_nombre": "Delicias de Concepción",
+      "id": "13-28-05",
+      "dte": {
+        "departamento": "13",
+        "municipio": "28",
+        "distrito": "05"
+      }
+    },
+    {
+      "nombre": "El Divisadero",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "28",
+      "municipio_nombre": "MORAZAN SUR",
+      "distrito_codigo": "06",
+      "distrito_nombre": "El Divisadero",
+      "id": "13-28-06",
+      "dte": {
+        "departamento": "13",
+        "municipio": "28",
+        "distrito": "06"
+      }
+    },
+    {
+      "nombre": "Dolores",
+      "aliases": [],
+      "departamento_codigo": "09",
+      "departamento_nombre": "Cabañas",
+      "municipio_codigo": "11",
+      "municipio_nombre": "CABAÑAS ESTE",
+      "distrito_codigo": "09",
+      "distrito_nombre": "Dolores",
+      "id": "09-11-09",
+      "dte": {
+        "departamento": "09",
+        "municipio": "11",
+        "distrito": "09"
+      }
+    },
+    {
+      "nombre": "Dulce Nombre de María",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "35",
+      "municipio_nombre": "CHALATENANGO CENTRO",
+      "distrito_codigo": "08",
+      "distrito_nombre": "Dulce Nombre de María",
+      "id": "04-35-08",
+      "dte": {
+        "departamento": "04",
+        "municipio": "35",
+        "distrito": "08"
+      }
+    },
+    {
+      "nombre": "Ereguayquín",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "25",
+      "municipio_nombre": "USULUTAN ESTE",
+      "distrito_codigo": "06",
+      "distrito_nombre": "Ereguayquín",
+      "id": "11-25-06",
+      "dte": {
+        "departamento": "11",
+        "municipio": "25",
+        "distrito": "06"
+      }
+    },
+    {
+      "nombre": "Estanzuelas",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "24",
+      "municipio_nombre": "USULUTAN NORTE",
+      "distrito_codigo": "07",
+      "distrito_nombre": "Estanzuelas",
+      "id": "11-24-07",
+      "dte": {
+        "departamento": "11",
+        "municipio": "24",
+        "distrito": "07"
+      }
+    },
+    {
+      "nombre": "Guacotecti",
+      "aliases": [],
+      "departamento_codigo": "09",
+      "departamento_nombre": "Cabañas",
+      "municipio_codigo": "11",
+      "municipio_nombre": "CABAÑAS ESTE",
+      "distrito_codigo": "02",
+      "distrito_nombre": "Guacotecti",
+      "id": "09-11-02",
+      "dte": {
+        "departamento": "09",
+        "municipio": "11",
+        "distrito": "02"
+      }
+    },
+    {
+      "nombre": "Guadalupe",
+      "aliases": [],
+      "departamento_codigo": "10",
+      "departamento_nombre": "San Vicente",
+      "municipio_codigo": "15",
+      "municipio_nombre": "SAN VICENTE SUR",
+      "distrito_codigo": "02",
+      "distrito_nombre": "Guadalupe",
+      "id": "10-15-02",
+      "dte": {
+        "departamento": "10",
+        "municipio": "15",
+        "distrito": "02"
+      }
+    },
+    {
+      "nombre": "Gualococti",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "28",
+      "municipio_nombre": "MORAZAN SUR",
+      "distrito_codigo": "08",
+      "distrito_nombre": "Gualococti",
+      "id": "13-28-08",
+      "dte": {
+        "departamento": "13",
+        "municipio": "28",
+        "distrito": "08"
+      }
+    },
+    {
+      "nombre": "Guatajiagua",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "28",
+      "municipio_nombre": "MORAZAN SUR",
+      "distrito_codigo": "09",
+      "distrito_nombre": "Guatajiagua",
+      "id": "13-28-09",
+      "dte": {
+        "departamento": "13",
+        "municipio": "28",
+        "distrito": "09"
+      }
+    },
+    {
+      "nombre": "Guaymango",
+      "aliases": [],
+      "departamento_codigo": "01",
+      "departamento_nombre": "Ahuachapán",
+      "municipio_codigo": "15",
+      "municipio_nombre": "AHUACHAPAN SUR",
+      "distrito_codigo": "06",
+      "distrito_nombre": "Guaymango",
+      "id": "01-15-06",
+      "dte": {
+        "departamento": "01",
+        "municipio": "15",
+        "distrito": "06"
+      }
+    },
+    {
+      "nombre": "Guazapa",
+      "aliases": [],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "20",
+      "municipio_nombre": "SAN SALVADOR NORTE",
+      "distrito_codigo": "06",
+      "distrito_nombre": "Guazapa",
+      "id": "06-20-06",
+      "dte": {
+        "departamento": "06",
+        "municipio": "20",
+        "distrito": "06"
+      }
+    },
+    {
+      "nombre": "Huizúcar",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "26",
+      "municipio_nombre": "LA LIBERTAD ESTE",
+      "distrito_codigo": "06",
+      "distrito_nombre": "Huizúcar",
+      "id": "05-26-06",
+      "dte": {
+        "departamento": "05",
+        "municipio": "26",
+        "distrito": "06"
+      }
+    },
+    {
+      "nombre": "Ilobasco",
+      "aliases": [],
+      "departamento_codigo": "09",
+      "departamento_nombre": "Cabañas",
+      "municipio_codigo": "10",
+      "municipio_nombre": "CABAÑAS OESTE",
+      "distrito_codigo": "03",
+      "distrito_nombre": "Ilobasco",
+      "id": "09-10-03",
+      "dte": {
+        "departamento": "09",
+        "municipio": "10",
+        "distrito": "03"
+      }
+    },
+    {
+      "nombre": "Ilopango",
+      "aliases": [],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "22",
+      "municipio_nombre": "SAN SALVADOR ESTE",
+      "distrito_codigo": "07",
+      "distrito_nombre": "Ilopango",
+      "id": "06-22-07",
+      "dte": {
+        "departamento": "06",
+        "municipio": "22",
+        "distrito": "07"
+      }
+    },
+    {
+      "nombre": "Intipucá",
+      "aliases": [],
+      "departamento_codigo": "14",
+      "departamento_nombre": "La Unión",
+      "municipio_codigo": "20",
+      "municipio_nombre": "LA UNION SUR",
+      "distrito_codigo": "07",
+      "distrito_nombre": "Intipucá",
+      "id": "14-20-07",
+      "dte": {
+        "departamento": "14",
+        "municipio": "20",
+        "distrito": "07"
+      }
+    },
+    {
+      "nombre": "Izalco",
+      "aliases": [],
+      "departamento_codigo": "03",
+      "departamento_nombre": "Sonsonate",
+      "municipio_codigo": "19",
+      "municipio_nombre": "SONSONATE ESTE",
+      "distrito_codigo": "06",
+      "distrito_nombre": "Izalco",
+      "id": "03-19-06",
+      "dte": {
+        "departamento": "03",
+        "municipio": "19",
+        "distrito": "06"
+      }
+    },
+    {
+      "nombre": "Jayaque",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "25",
+      "municipio_nombre": "LA LIBERTAD OESTE",
+      "distrito_codigo": "07",
+      "distrito_nombre": "Jayaque",
+      "id": "05-25-07",
+      "dte": {
+        "departamento": "05",
+        "municipio": "25",
+        "distrito": "07"
+      }
+    },
+    {
+      "nombre": "Jerusalén",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "24",
+      "municipio_nombre": "LA PAZ CENTRO",
+      "distrito_codigo": "03",
+      "distrito_nombre": "Jerusalén",
+      "id": "08-24-03",
+      "dte": {
+        "departamento": "08",
+        "municipio": "24",
+        "distrito": "03"
+      }
+    },
+    {
+      "nombre": "Jicalapa",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "27",
+      "municipio_nombre": "LA LIBERTAD COSTA",
+      "distrito_codigo": "08",
+      "distrito_nombre": "Jicalapa",
+      "id": "05-27-08",
+      "dte": {
+        "departamento": "05",
+        "municipio": "27",
+        "distrito": "08"
+      }
+    },
+    {
+      "nombre": "Jiquilisco",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "26",
+      "municipio_nombre": "USULUTAN OESTE",
+      "distrito_codigo": "08",
+      "distrito_nombre": "Jiquilisco",
+      "id": "11-26-08",
+      "dte": {
+        "departamento": "11",
+        "municipio": "26",
+        "distrito": "08"
+      }
+    },
+    {
+      "nombre": "Joateca",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "27",
+      "municipio_nombre": "MORAZAN NORTE",
+      "distrito_codigo": "10",
+      "distrito_nombre": "Joateca",
+      "id": "13-27-10",
+      "dte": {
+        "departamento": "13",
+        "municipio": "27",
+        "distrito": "10"
+      }
+    },
+    {
+      "nombre": "Jocoaitique",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "27",
+      "municipio_nombre": "MORAZAN NORTE",
+      "distrito_codigo": "11",
+      "distrito_nombre": "Jocoaitique",
+      "id": "13-27-11",
+      "dte": {
+        "departamento": "13",
+        "municipio": "27",
+        "distrito": "11"
+      }
+    },
+    {
+      "nombre": "Jocoro",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "28",
+      "municipio_nombre": "MORAZAN SUR",
+      "distrito_codigo": "12",
+      "distrito_nombre": "Jocoro",
+      "id": "13-28-12",
+      "dte": {
+        "departamento": "13",
+        "municipio": "28",
+        "distrito": "12"
+      }
+    },
+    {
+      "nombre": "Juayúa",
+      "aliases": [],
+      "departamento_codigo": "03",
+      "departamento_nombre": "Sonsonate",
+      "municipio_codigo": "17",
+      "municipio_nombre": "SONSONATE NORTE",
+      "distrito_codigo": "07",
+      "distrito_nombre": "Juayúa",
+      "id": "03-17-07",
+      "dte": {
+        "departamento": "03",
+        "municipio": "17",
+        "distrito": "07"
+      }
+    },
+    {
+      "nombre": "Jucuapa",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "24",
+      "municipio_nombre": "USULUTAN NORTE",
+      "distrito_codigo": "09",
+      "distrito_nombre": "Jucuapa",
+      "id": "11-24-09",
+      "dte": {
+        "departamento": "11",
+        "municipio": "24",
+        "distrito": "09"
+      }
+    },
+    {
+      "nombre": "Jucuarán",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "25",
+      "municipio_nombre": "USULUTAN ESTE",
+      "distrito_codigo": "10",
+      "distrito_nombre": "Jucuarán",
+      "id": "11-25-10",
+      "dte": {
+        "departamento": "11",
+        "municipio": "25",
+        "distrito": "10"
+      }
+    },
+    {
+      "nombre": "Jujutla",
+      "aliases": [],
+      "departamento_codigo": "01",
+      "departamento_nombre": "Ahuachapán",
+      "municipio_codigo": "15",
+      "municipio_nombre": "AHUACHAPAN SUR",
+      "distrito_codigo": "07",
+      "distrito_nombre": "Jujutla",
+      "id": "01-15-07",
+      "dte": {
+        "departamento": "01",
+        "municipio": "15",
+        "distrito": "07"
+      }
+    },
+    {
+      "nombre": "Jutiapa",
+      "aliases": [],
+      "departamento_codigo": "09",
+      "departamento_nombre": "Cabañas",
+      "municipio_codigo": "10",
+      "municipio_nombre": "CABAÑAS OESTE",
+      "distrito_codigo": "04",
+      "distrito_nombre": "Jutiapa",
+      "id": "09-10-04",
+      "dte": {
+        "departamento": "09",
+        "municipio": "10",
+        "distrito": "04"
+      }
+    },
+    {
+      "nombre": "La Laguna",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "11",
+      "distrito_nombre": "La Laguna",
+      "id": "04-36-11",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "11"
+      }
+    },
+    {
+      "nombre": "La Libertad",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "27",
+      "municipio_nombre": "LA LIBERTAD COSTA",
+      "distrito_codigo": "09",
+      "distrito_nombre": "La Libertad",
+      "id": "05-27-09",
+      "dte": {
+        "departamento": "05",
+        "municipio": "27",
+        "distrito": "09"
+      }
+    },
+    {
+      "nombre": "Lislique",
+      "aliases": [],
+      "departamento_codigo": "14",
+      "departamento_nombre": "La Unión",
+      "municipio_codigo": "19",
+      "municipio_nombre": "LA UNION NORTE",
+      "distrito_codigo": "09",
+      "distrito_nombre": "Lislique",
+      "id": "14-19-09",
+      "dte": {
+        "departamento": "14",
+        "municipio": "19",
+        "distrito": "09"
+      }
+    },
+    {
+      "nombre": "Lolotique",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "23",
+      "municipio_nombre": "SAN MIGUEL OESTE",
+      "distrito_codigo": "08",
+      "distrito_nombre": "Lolotique",
+      "id": "12-23-08",
+      "dte": {
+        "departamento": "12",
+        "municipio": "23",
+        "distrito": "08"
+      }
+    },
+    {
+      "nombre": "Lolotiquillo",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "28",
+      "municipio_nombre": "MORAZAN SUR",
+      "distrito_codigo": "13",
+      "distrito_nombre": "Lolotiquillo",
+      "id": "13-28-13",
+      "dte": {
+        "departamento": "13",
+        "municipio": "28",
+        "distrito": "13"
+      }
+    },
+    {
+      "nombre": "Masahuat",
+      "aliases": [],
+      "departamento_codigo": "02",
+      "departamento_nombre": "Santa Ana",
+      "municipio_codigo": "14",
+      "municipio_nombre": "SANTA ANA NORTE",
+      "distrito_codigo": "06",
+      "distrito_nombre": "Masahuat",
+      "id": "02-14-06",
+      "dte": {
+        "departamento": "02",
+        "municipio": "14",
+        "distrito": "06"
+      }
+    },
+    {
+      "nombre": "Meanguera",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "27",
+      "municipio_nombre": "MORAZAN NORTE",
+      "distrito_codigo": "14",
+      "distrito_nombre": "Meanguera",
+      "id": "13-27-14",
+      "dte": {
+        "departamento": "13",
+        "municipio": "27",
+        "distrito": "14"
+      }
+    },
+    {
+      "nombre": "Meanguera del Golfo",
+      "aliases": [],
+      "departamento_codigo": "14",
+      "departamento_nombre": "La Unión",
+      "municipio_codigo": "20",
+      "municipio_nombre": "LA UNION SUR",
+      "distrito_codigo": "10",
+      "distrito_nombre": "Meanguera del Golfo",
+      "id": "14-20-10",
+      "dte": {
+        "departamento": "14",
+        "municipio": "20",
+        "distrito": "10"
+      }
+    },
+    {
+      "nombre": "Mejicanos",
+      "aliases": [],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "23",
+      "municipio_nombre": "SAN SALVADOR CENTRO",
+      "distrito_codigo": "08",
+      "distrito_nombre": "Mejicanos",
+      "id": "06-23-08",
+      "dte": {
+        "departamento": "06",
+        "municipio": "23",
+        "distrito": "08"
+      }
+    },
+    {
+      "nombre": "Mercedes La Ceiba",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "24",
+      "municipio_nombre": "LA PAZ CENTRO",
+      "distrito_codigo": "04",
+      "distrito_nombre": "Mercedes La Ceiba",
+      "id": "08-24-04",
+      "dte": {
+        "departamento": "08",
+        "municipio": "24",
+        "distrito": "04"
+      }
+    },
+    {
+      "nombre": "Mercedes Umaña",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "24",
+      "municipio_nombre": "USULUTAN NORTE",
+      "distrito_codigo": "11",
+      "distrito_nombre": "Mercedes Umaña",
+      "id": "11-24-11",
+      "dte": {
+        "departamento": "11",
+        "municipio": "24",
+        "distrito": "11"
+      }
+    },
+    {
+      "nombre": "Metapán",
+      "aliases": [],
+      "departamento_codigo": "02",
+      "departamento_nombre": "Santa Ana",
+      "municipio_codigo": "14",
+      "municipio_nombre": "SANTA ANA NORTE",
+      "distrito_codigo": "07",
+      "distrito_nombre": "Metapán",
+      "id": "02-14-07",
+      "dte": {
+        "departamento": "02",
+        "municipio": "14",
+        "distrito": "07"
+      }
+    },
+    {
+      "nombre": "Moncagua",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "22",
+      "municipio_nombre": "SAN MIGUEL CENTRO",
+      "distrito_codigo": "09",
+      "distrito_nombre": "Moncagua",
+      "id": "12-22-09",
+      "dte": {
+        "departamento": "12",
+        "municipio": "22",
+        "distrito": "09"
+      }
+    },
+    {
+      "nombre": "Monte San Juan",
+      "aliases": [],
+      "departamento_codigo": "07",
+      "departamento_nombre": "Cuscatlán",
+      "municipio_codigo": "18",
+      "municipio_nombre": "CUSCATLAN SUR",
+      "distrito_codigo": "05",
+      "distrito_nombre": "Monte San Juan",
+      "id": "07-18-05",
+      "dte": {
+        "departamento": "07",
+        "municipio": "18",
+        "distrito": "05"
+      }
+    },
+    {
+      "nombre": "Nahuizalco",
+      "aliases": [],
+      "departamento_codigo": "03",
+      "departamento_nombre": "Sonsonate",
+      "municipio_codigo": "17",
+      "municipio_nombre": "SONSONATE NORTE",
+      "distrito_codigo": "08",
+      "distrito_nombre": "Nahuizalco",
+      "id": "03-17-08",
+      "dte": {
+        "departamento": "03",
+        "municipio": "17",
+        "distrito": "08"
+      }
+    },
+    {
+      "nombre": "Nahulingo",
+      "aliases": [],
+      "departamento_codigo": "03",
+      "departamento_nombre": "Sonsonate",
+      "municipio_codigo": "18",
+      "municipio_nombre": "SONSONATE CENTRO",
+      "distrito_codigo": "09",
+      "distrito_nombre": "Nahulingo",
+      "id": "03-18-09",
+      "dte": {
+        "departamento": "03",
+        "municipio": "18",
+        "distrito": "09"
+      }
+    },
+    {
+      "nombre": "Nejapa",
+      "aliases": [],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "21",
+      "municipio_nombre": "SAN SALVADOR OESTE",
+      "distrito_codigo": "09",
+      "distrito_nombre": "Nejapa",
+      "id": "06-21-09",
+      "dte": {
+        "departamento": "06",
+        "municipio": "21",
+        "distrito": "09"
+      }
+    },
+    {
+      "nombre": "Nombre de Jesús",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "15",
+      "distrito_nombre": "Nombre de Jesús",
+      "id": "04-36-15",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "15"
+      }
+    },
+    {
+      "nombre": "Nueva Concepción",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "35",
+      "municipio_nombre": "CHALATENANGO CENTRO",
+      "distrito_codigo": "16",
+      "distrito_nombre": "Nueva Concepción",
+      "id": "04-35-16",
+      "dte": {
+        "departamento": "04",
+        "municipio": "35",
+        "distrito": "16"
+      }
+    },
+    {
+      "nombre": "Nueva Esparta",
+      "aliases": [],
+      "departamento_codigo": "14",
+      "departamento_nombre": "La Unión",
+      "municipio_codigo": "19",
+      "municipio_nombre": "LA UNION NORTE",
+      "distrito_codigo": "11",
+      "distrito_nombre": "Nueva Esparta",
+      "id": "14-19-11",
+      "dte": {
+        "departamento": "14",
+        "municipio": "19",
+        "distrito": "11"
+      }
+    },
+    {
+      "nombre": "Nueva Granada",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "24",
+      "municipio_nombre": "USULUTAN NORTE",
+      "distrito_codigo": "12",
+      "distrito_nombre": "Nueva Granada",
+      "id": "11-24-12",
+      "dte": {
+        "departamento": "11",
+        "municipio": "24",
+        "distrito": "12"
+      }
+    },
+    {
+      "nombre": "Nueva Guadalupe",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "23",
+      "municipio_nombre": "SAN MIGUEL OESTE",
+      "distrito_codigo": "10",
+      "distrito_nombre": "Nueva Guadalupe",
+      "id": "12-23-10",
+      "dte": {
+        "departamento": "12",
+        "municipio": "23",
+        "distrito": "10"
+      }
+    },
+    {
+      "nombre": "Nueva Trinidad",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "17",
+      "distrito_nombre": "Nueva Trinidad",
+      "id": "04-36-17",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "17"
+      }
+    },
+    {
+      "nombre": "Nuevo Cuscatlán",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "26",
+      "municipio_nombre": "LA LIBERTAD ESTE",
+      "distrito_codigo": "10",
+      "distrito_nombre": "Nuevo Cuscatlán",
+      "id": "05-26-10",
+      "dte": {
+        "departamento": "05",
+        "municipio": "26",
+        "distrito": "10"
+      }
+    },
+    {
+      "nombre": "Nuevo Edén de San Juan",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "21",
+      "municipio_nombre": "SAN MIGUEL NORTE",
+      "distrito_codigo": "11",
+      "distrito_nombre": "Nuevo Edén de San Juan",
+      "id": "12-21-11",
+      "dte": {
+        "departamento": "12",
+        "municipio": "21",
+        "distrito": "11"
+      }
+    },
+    {
+      "nombre": "Ojos de Agua",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "18",
+      "distrito_nombre": "Ojos de Agua",
+      "id": "04-36-18",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "18"
+      }
+    },
+    {
+      "nombre": "Olocuilta",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "23",
+      "municipio_nombre": "LA PAZ OESTE",
+      "distrito_codigo": "05",
+      "distrito_nombre": "Olocuilta",
+      "id": "08-23-05",
+      "dte": {
+        "departamento": "08",
+        "municipio": "23",
+        "distrito": "05"
+      }
+    },
+    {
+      "nombre": "Oratorio de Concepción",
+      "aliases": [],
+      "departamento_codigo": "07",
+      "departamento_nombre": "Cuscatlán",
+      "municipio_codigo": "17",
+      "municipio_nombre": "CUSCATLAN NORTE",
+      "distrito_codigo": "06",
+      "distrito_nombre": "Oratorio de Concepción",
+      "id": "07-17-06",
+      "dte": {
+        "departamento": "07",
+        "municipio": "17",
+        "distrito": "06"
+      }
+    },
+    {
+      "nombre": "Osicala",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "28",
+      "municipio_nombre": "MORAZAN SUR",
+      "distrito_codigo": "15",
+      "distrito_nombre": "Osicala",
+      "id": "13-28-15",
+      "dte": {
+        "departamento": "13",
+        "municipio": "28",
+        "distrito": "15"
+      }
+    },
+    {
+      "nombre": "Ozatlán",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "25",
+      "municipio_nombre": "USULUTAN ESTE",
+      "distrito_codigo": "13",
+      "distrito_nombre": "Ozatlán",
+      "id": "11-25-13",
+      "dte": {
+        "departamento": "11",
+        "municipio": "25",
+        "distrito": "13"
+      }
+    },
+    {
+      "nombre": "El Paisnal",
+      "aliases": [],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "20",
+      "municipio_nombre": "SAN SALVADOR NORTE",
+      "distrito_codigo": "05",
+      "distrito_nombre": "El Paisnal",
+      "id": "06-20-05",
+      "dte": {
+        "departamento": "06",
+        "municipio": "20",
+        "distrito": "05"
+      }
+    },
+    {
+      "nombre": "La Palma",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "34",
+      "municipio_nombre": "CHALATENANGO NORTE",
+      "distrito_codigo": "12",
+      "distrito_nombre": "La Palma",
+      "id": "04-34-12",
+      "dte": {
+        "departamento": "04",
+        "municipio": "34",
+        "distrito": "12"
+      }
+    },
+    {
+      "nombre": "Panchimalco",
+      "aliases": [],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "24",
+      "municipio_nombre": "SAN SALVADOR SUR",
+      "distrito_codigo": "10",
+      "distrito_nombre": "Panchimalco",
+      "id": "06-24-10",
+      "dte": {
+        "departamento": "06",
+        "municipio": "24",
+        "distrito": "10"
+      }
+    },
+    {
+      "nombre": "El Paraíso",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "35",
+      "municipio_nombre": "CHALATENANGO CENTRO",
+      "distrito_codigo": "10",
+      "distrito_nombre": "El Paraíso",
+      "id": "04-35-10",
+      "dte": {
+        "departamento": "04",
+        "municipio": "35",
+        "distrito": "10"
+      }
+    },
+    {
+      "nombre": "Paraíso de Osorio",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "24",
+      "municipio_nombre": "LA PAZ CENTRO",
+      "distrito_codigo": "06",
+      "distrito_nombre": "Paraíso de Osorio",
+      "id": "08-24-06",
+      "dte": {
+        "departamento": "08",
+        "municipio": "24",
+        "distrito": "06"
+      }
+    },
+    {
+      "nombre": "Pasaquina",
+      "aliases": [],
+      "departamento_codigo": "14",
+      "departamento_nombre": "La Unión",
+      "municipio_codigo": "19",
+      "municipio_nombre": "LA UNION NORTE",
+      "distrito_codigo": "12",
+      "distrito_nombre": "Pasaquina",
+      "id": "14-19-12",
+      "dte": {
+        "departamento": "14",
+        "municipio": "19",
+        "distrito": "12"
+      }
+    },
+    {
+      "nombre": "Perquín",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "27",
+      "municipio_nombre": "MORAZAN NORTE",
+      "distrito_codigo": "16",
+      "distrito_nombre": "Perquín",
+      "id": "13-27-16",
+      "dte": {
+        "departamento": "13",
+        "municipio": "27",
+        "distrito": "16"
+      }
+    },
+    {
+      "nombre": "Polorós",
+      "aliases": [],
+      "departamento_codigo": "14",
+      "departamento_nombre": "La Unión",
+      "municipio_codigo": "19",
+      "municipio_nombre": "LA UNION NORTE",
+      "distrito_codigo": "13",
+      "distrito_nombre": "Polorós",
+      "id": "14-19-13",
+      "dte": {
+        "departamento": "14",
+        "municipio": "19",
+        "distrito": "13"
+      }
+    },
+    {
+      "nombre": "El Porvenir",
+      "aliases": [],
+      "departamento_codigo": "02",
+      "departamento_nombre": "Santa Ana",
+      "municipio_codigo": "17",
+      "municipio_nombre": "SANTA ANA OESTE",
+      "distrito_codigo": "05",
+      "distrito_nombre": "El Porvenir",
+      "id": "02-17-05",
+      "dte": {
+        "departamento": "02",
+        "municipio": "17",
+        "distrito": "05"
+      }
+    },
+    {
+      "nombre": "Potonico",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "19",
+      "distrito_nombre": "Potonico",
+      "id": "04-36-19",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "19"
+      }
+    },
+    {
+      "nombre": "Puerto El Triunfo",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "26",
+      "municipio_nombre": "USULUTAN OESTE",
+      "distrito_codigo": "14",
+      "distrito_nombre": "Puerto El Triunfo",
+      "id": "11-26-14",
+      "dte": {
+        "departamento": "11",
+        "municipio": "26",
+        "distrito": "14"
+      }
+    },
+    {
+      "nombre": "Quelepa",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "22",
+      "municipio_nombre": "SAN MIGUEL CENTRO",
+      "distrito_codigo": "12",
+      "distrito_nombre": "Quelepa",
+      "id": "12-22-12",
+      "dte": {
+        "departamento": "12",
+        "municipio": "22",
+        "distrito": "12"
+      }
+    },
+    {
+      "nombre": "Quezaltepeque",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "23",
+      "municipio_nombre": "LA LIBERTAD NORTE",
+      "distrito_codigo": "12",
+      "distrito_nombre": "Quezaltepeque",
+      "id": "05-23-12",
+      "dte": {
+        "departamento": "05",
+        "municipio": "23",
+        "distrito": "12"
+      }
+    },
+    {
+      "nombre": "El Refugio",
+      "aliases": [],
+      "departamento_codigo": "01",
+      "departamento_nombre": "Ahuachapán",
+      "municipio_codigo": "13",
+      "municipio_nombre": "AHUACHAPAN NORTE",
+      "distrito_codigo": "05",
+      "distrito_nombre": "El Refugio",
+      "id": "01-13-05",
+      "dte": {
+        "departamento": "01",
+        "municipio": "13",
+        "distrito": "05"
+      }
+    },
+    {
+      "nombre": "La Reina",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "35",
+      "municipio_nombre": "CHALATENANGO CENTRO",
+      "distrito_codigo": "13",
+      "distrito_nombre": "La Reina",
+      "id": "04-35-13",
+      "dte": {
+        "departamento": "04",
+        "municipio": "35",
+        "distrito": "13"
+      }
+    },
+    {
+      "nombre": "El Rosario",
+      "aliases": [],
+      "departamento_codigo": "07",
+      "departamento_nombre": "Cuscatlán",
+      "municipio_codigo": "18",
+      "municipio_nombre": "CUSCATLAN SUR",
+      "distrito_codigo": "04",
+      "distrito_nombre": "El Rosario",
+      "id": "07-18-04",
+      "dte": {
+        "departamento": "07",
+        "municipio": "18",
+        "distrito": "04"
+      }
+    },
+    {
+      "nombre": "El Rosario",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "24",
+      "municipio_nombre": "LA PAZ CENTRO",
+      "distrito_codigo": "02",
+      "distrito_nombre": "El Rosario",
+      "id": "08-24-02",
+      "dte": {
+        "departamento": "08",
+        "municipio": "24",
+        "distrito": "02"
+      }
+    },
+    {
+      "nombre": "El Rosario",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "27",
+      "municipio_nombre": "MORAZAN NORTE",
+      "distrito_codigo": "07",
+      "distrito_nombre": "El Rosario",
+      "id": "13-27-07",
+      "dte": {
+        "departamento": "13",
+        "municipio": "27",
+        "distrito": "07"
+      }
+    },
+    {
+      "nombre": "Rosario de Mora",
+      "aliases": [],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "24",
+      "municipio_nombre": "SAN SALVADOR SUR",
+      "distrito_codigo": "11",
+      "distrito_nombre": "Rosario de Mora",
+      "id": "06-24-11",
+      "dte": {
+        "departamento": "06",
+        "municipio": "24",
+        "distrito": "11"
+      }
+    },
+    {
+      "nombre": "Sacacoyo",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "25",
+      "municipio_nombre": "LA LIBERTAD OESTE",
+      "distrito_codigo": "13",
+      "distrito_nombre": "Sacacoyo",
+      "id": "05-25-13",
+      "dte": {
+        "departamento": "05",
+        "municipio": "25",
+        "distrito": "13"
+      }
+    },
+    {
+      "nombre": "Salcoatitán",
+      "aliases": [],
+      "departamento_codigo": "03",
+      "departamento_nombre": "Sonsonate",
+      "municipio_codigo": "17",
+      "municipio_nombre": "SONSONATE NORTE",
+      "distrito_codigo": "10",
+      "distrito_nombre": "Salcoatitán",
+      "id": "03-17-10",
+      "dte": {
+        "departamento": "03",
+        "municipio": "17",
+        "distrito": "10"
+      }
+    },
+    {
+      "nombre": "San Agustín",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "26",
+      "municipio_nombre": "USULUTAN OESTE",
+      "distrito_codigo": "15",
+      "distrito_nombre": "San Agustín",
+      "id": "11-26-15",
+      "dte": {
+        "departamento": "11",
+        "municipio": "26",
+        "distrito": "15"
+      }
+    },
+    {
+      "nombre": "San Alejo",
+      "aliases": [],
+      "departamento_codigo": "14",
+      "departamento_nombre": "La Unión",
+      "municipio_codigo": "20",
+      "municipio_nombre": "LA UNION SUR",
+      "distrito_codigo": "14",
+      "distrito_nombre": "San Alejo",
+      "id": "14-20-14",
+      "dte": {
+        "departamento": "14",
+        "municipio": "20",
+        "distrito": "14"
+      }
+    },
+    {
+      "nombre": "San Antonio de la Cruz",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "20",
+      "distrito_nombre": "San Antonio de la Cruz",
+      "id": "04-36-20",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "20"
+      }
+    },
+    {
+      "nombre": "San Antonio Masahuat",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "24",
+      "municipio_nombre": "LA PAZ CENTRO",
+      "distrito_codigo": "07",
+      "distrito_nombre": "San Antonio Masahuat",
+      "id": "08-24-07",
+      "dte": {
+        "departamento": "08",
+        "municipio": "24",
+        "distrito": "07"
+      }
+    },
+    {
+      "nombre": "San Antonio del Monte",
+      "aliases": [],
+      "departamento_codigo": "03",
+      "departamento_nombre": "Sonsonate",
+      "municipio_codigo": "18",
+      "municipio_nombre": "SONSONATE CENTRO",
+      "distrito_codigo": "11",
+      "distrito_nombre": "San Antonio del Monte",
+      "id": "03-18-11",
+      "dte": {
+        "departamento": "03",
+        "municipio": "18",
+        "distrito": "11"
+      }
+    },
+    {
+      "nombre": "San Antonio del Mosco",
+      "aliases": [
+        "San Antonio"
+      ],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "21",
+      "municipio_nombre": "SAN MIGUEL NORTE",
+      "distrito_codigo": "13",
+      "distrito_nombre": "San Antonio del Mosco",
+      "id": "12-21-13",
+      "dte": {
+        "departamento": "12",
+        "municipio": "21",
+        "distrito": "13"
+      }
+    },
+    {
+      "nombre": "San Antonio Pajonal",
+      "aliases": [],
+      "departamento_codigo": "02",
+      "departamento_nombre": "Santa Ana",
+      "municipio_codigo": "17",
+      "municipio_nombre": "SANTA ANA OESTE",
+      "distrito_codigo": "08",
+      "distrito_nombre": "San Antonio Pajonal",
+      "id": "02-17-08",
+      "dte": {
+        "departamento": "02",
+        "municipio": "17",
+        "distrito": "08"
+      }
+    },
+    {
+      "nombre": "San Antonio Los Ranchos",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "21",
+      "distrito_nombre": "San Antonio Los Ranchos",
+      "id": "04-36-21",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "21"
+      }
+    },
+    {
+      "nombre": "San Bartolomé Perulapía",
+      "aliases": [],
+      "departamento_codigo": "07",
+      "departamento_nombre": "Cuscatlán",
+      "municipio_codigo": "17",
+      "municipio_nombre": "CUSCATLAN NORTE",
+      "distrito_codigo": "07",
+      "distrito_nombre": "San Bartolomé Perulapía",
+      "id": "07-17-07",
+      "dte": {
+        "departamento": "07",
+        "municipio": "17",
+        "distrito": "07"
+      }
+    },
+    {
+      "nombre": "San Buenaventura",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "24",
+      "municipio_nombre": "USULUTAN NORTE",
+      "distrito_codigo": "16",
+      "distrito_nombre": "San Buenaventura",
+      "id": "11-24-16",
+      "dte": {
+        "departamento": "11",
+        "municipio": "24",
+        "distrito": "16"
+      }
+    },
+    {
+      "nombre": "San Carlos",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "28",
+      "municipio_nombre": "MORAZAN SUR",
+      "distrito_codigo": "17",
+      "distrito_nombre": "San Carlos",
+      "id": "13-28-17",
+      "dte": {
+        "departamento": "13",
+        "municipio": "28",
+        "distrito": "17"
+      }
+    },
+    {
+      "nombre": "San Cayetano Istepeque",
+      "aliases": [],
+      "departamento_codigo": "10",
+      "departamento_nombre": "San Vicente",
+      "municipio_codigo": "15",
+      "municipio_nombre": "SAN VICENTE SUR",
+      "distrito_codigo": "03",
+      "distrito_nombre": "San Cayetano Istepeque",
+      "id": "10-15-03",
+      "dte": {
+        "departamento": "10",
+        "municipio": "15",
+        "distrito": "03"
+      }
+    },
+    {
+      "nombre": "San Cristóbal",
+      "aliases": [],
+      "departamento_codigo": "07",
+      "departamento_nombre": "Cuscatlán",
+      "municipio_codigo": "18",
+      "municipio_nombre": "CUSCATLAN SUR",
+      "distrito_codigo": "08",
+      "distrito_nombre": "San Cristóbal",
+      "id": "07-18-08",
+      "dte": {
+        "departamento": "07",
+        "municipio": "18",
+        "distrito": "08"
+      }
+    },
+    {
+      "nombre": "San Dionisio",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "25",
+      "municipio_nombre": "USULUTAN ESTE",
+      "distrito_codigo": "17",
+      "distrito_nombre": "San Dionisio",
+      "id": "11-25-17",
+      "dte": {
+        "departamento": "11",
+        "municipio": "25",
+        "distrito": "17"
+      }
+    },
+    {
+      "nombre": "San Emigdio",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "24",
+      "municipio_nombre": "LA PAZ CENTRO",
+      "distrito_codigo": "08",
+      "distrito_nombre": "San Emigdio",
+      "id": "08-24-08",
+      "dte": {
+        "departamento": "08",
+        "municipio": "24",
+        "distrito": "08"
+      }
+    },
+    {
+      "nombre": "San Esteban Catarina",
+      "aliases": [],
+      "departamento_codigo": "10",
+      "departamento_nombre": "San Vicente",
+      "municipio_codigo": "14",
+      "municipio_nombre": "SAN VICENTE NORTE",
+      "distrito_codigo": "06",
+      "distrito_nombre": "San Esteban Catarina",
+      "id": "10-14-06",
+      "dte": {
+        "departamento": "10",
+        "municipio": "14",
+        "distrito": "06"
+      }
+    },
+    {
+      "nombre": "San Fernando",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "35",
+      "municipio_nombre": "CHALATENANGO CENTRO",
+      "distrito_codigo": "22",
+      "distrito_nombre": "San Fernando",
+      "id": "04-35-22",
+      "dte": {
+        "departamento": "04",
+        "municipio": "35",
+        "distrito": "22"
+      }
+    },
+    {
+      "nombre": "San Fernando",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "27",
+      "municipio_nombre": "MORAZAN NORTE",
+      "distrito_codigo": "18",
+      "distrito_nombre": "San Fernando",
+      "id": "13-27-18",
+      "dte": {
+        "departamento": "13",
+        "municipio": "27",
+        "distrito": "18"
+      }
+    },
+    {
+      "nombre": "San Francisco Chinameca",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "23",
+      "municipio_nombre": "LA PAZ OESTE",
+      "distrito_codigo": "09",
+      "distrito_nombre": "San Francisco Chinameca",
+      "id": "08-23-09",
+      "dte": {
+        "departamento": "08",
+        "municipio": "23",
+        "distrito": "09"
+      }
+    },
+    {
+      "nombre": "San Francisco Gotera",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "28",
+      "municipio_nombre": "MORAZAN SUR",
+      "distrito_codigo": "19",
+      "distrito_nombre": "San Francisco Gotera",
+      "id": "13-28-19",
+      "dte": {
+        "departamento": "13",
+        "municipio": "28",
+        "distrito": "19"
+      }
+    },
+    {
+      "nombre": "San Francisco Javier",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "26",
+      "municipio_nombre": "USULUTAN OESTE",
+      "distrito_codigo": "19",
+      "distrito_nombre": "San Francisco Javier",
+      "id": "11-26-19",
+      "dte": {
+        "departamento": "11",
+        "municipio": "26",
+        "distrito": "19"
+      }
+    },
+    {
+      "nombre": "San Francisco Lempa",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "23",
+      "distrito_nombre": "San Francisco Lempa",
+      "id": "04-36-23",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "23"
+      }
+    },
+    {
+      "nombre": "San Francisco Menéndez",
+      "aliases": [],
+      "departamento_codigo": "01",
+      "departamento_nombre": "Ahuachapán",
+      "municipio_codigo": "15",
+      "municipio_nombre": "AHUACHAPAN SUR",
+      "distrito_codigo": "08",
+      "distrito_nombre": "San Francisco Menéndez",
+      "id": "01-15-08",
+      "dte": {
+        "departamento": "01",
+        "municipio": "15",
+        "distrito": "08"
+      }
+    },
+    {
+      "nombre": "San Francisco Morazán",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "35",
+      "municipio_nombre": "CHALATENANGO CENTRO",
+      "distrito_codigo": "24",
+      "distrito_nombre": "San Francisco Morazán",
+      "id": "04-35-24",
+      "dte": {
+        "departamento": "04",
+        "municipio": "35",
+        "distrito": "24"
+      }
+    },
+    {
+      "nombre": "San Gerardo",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "21",
+      "municipio_nombre": "SAN MIGUEL NORTE",
+      "distrito_codigo": "14",
+      "distrito_nombre": "San Gerardo",
+      "id": "12-21-14",
+      "dte": {
+        "departamento": "12",
+        "municipio": "21",
+        "distrito": "14"
+      }
+    },
+    {
+      "nombre": "San Ignacio",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "34",
+      "municipio_nombre": "CHALATENANGO NORTE",
+      "distrito_codigo": "25",
+      "distrito_nombre": "San Ignacio",
+      "id": "04-34-25",
+      "dte": {
+        "departamento": "04",
+        "municipio": "34",
+        "distrito": "25"
+      }
+    },
+    {
+      "nombre": "San Ildefonso",
+      "aliases": [],
+      "departamento_codigo": "10",
+      "departamento_nombre": "San Vicente",
+      "municipio_codigo": "14",
+      "municipio_nombre": "SAN VICENTE NORTE",
+      "distrito_codigo": "07",
+      "distrito_nombre": "San Ildefonso",
+      "id": "10-14-07",
+      "dte": {
+        "departamento": "10",
+        "municipio": "14",
+        "distrito": "07"
+      }
+    },
+    {
+      "nombre": "San Isidro",
+      "aliases": [],
+      "departamento_codigo": "09",
+      "departamento_nombre": "Cabañas",
+      "municipio_codigo": "11",
+      "municipio_nombre": "CABAÑAS ESTE",
+      "distrito_codigo": "05",
+      "distrito_nombre": "San Isidro",
+      "id": "09-11-05",
+      "dte": {
+        "departamento": "09",
+        "municipio": "11",
+        "distrito": "05"
+      }
+    },
+    {
+      "nombre": "San Isidro",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "27",
+      "municipio_nombre": "MORAZAN NORTE",
+      "distrito_codigo": "20",
+      "distrito_nombre": "San Isidro",
+      "id": "13-27-20",
+      "dte": {
+        "departamento": "13",
+        "municipio": "27",
+        "distrito": "20"
+      }
+    },
+    {
+      "nombre": "San Isidro Labrador",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "26",
+      "distrito_nombre": "San Isidro Labrador",
+      "id": "04-36-26",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "26"
+      }
+    },
+    {
+      "nombre": "San Jorge",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "23",
+      "municipio_nombre": "SAN MIGUEL OESTE",
+      "distrito_codigo": "15",
+      "distrito_nombre": "San Jorge",
+      "id": "12-23-15",
+      "dte": {
+        "departamento": "12",
+        "municipio": "23",
+        "distrito": "15"
+      }
+    },
+    {
+      "nombre": "San José Cancasque",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "27",
+      "distrito_nombre": "San José Cancasque",
+      "id": "04-36-27",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "27"
+      }
+    },
+    {
+      "nombre": "San José Las Flores",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "28",
+      "distrito_nombre": "San José Las Flores",
+      "id": "04-36-28",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "28"
+      }
+    },
+    {
+      "nombre": "San José La Fuente",
+      "aliases": [
+        "San José",
+        "San Jose"
+      ],
+      "departamento_codigo": "14",
+      "departamento_nombre": "La Unión",
+      "municipio_codigo": "19",
+      "municipio_nombre": "LA UNION NORTE",
+      "distrito_codigo": "15",
+      "distrito_nombre": "San José La Fuente",
+      "id": "14-19-15",
+      "dte": {
+        "departamento": "14",
+        "municipio": "19",
+        "distrito": "15"
+      }
+    },
+    {
+      "nombre": "San José Guayabal",
+      "aliases": [],
+      "departamento_codigo": "07",
+      "departamento_nombre": "Cuscatlán",
+      "municipio_codigo": "17",
+      "municipio_nombre": "CUSCATLAN NORTE",
+      "distrito_codigo": "09",
+      "distrito_nombre": "San José Guayabal",
+      "id": "07-17-09",
+      "dte": {
+        "departamento": "07",
+        "municipio": "17",
+        "distrito": "09"
+      }
+    },
+    {
+      "nombre": "San José Villanueva",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "26",
+      "municipio_nombre": "LA LIBERTAD ESTE",
+      "distrito_codigo": "14",
+      "distrito_nombre": "San José Villanueva",
+      "id": "05-26-14",
+      "dte": {
+        "departamento": "05",
+        "municipio": "26",
+        "distrito": "14"
+      }
+    },
+    {
+      "nombre": "San Juan Nonualco",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "25",
+      "municipio_nombre": "LA PAZ ESTE",
+      "distrito_codigo": "10",
+      "distrito_nombre": "San Juan Nonualco",
+      "id": "08-25-10",
+      "dte": {
+        "departamento": "08",
+        "municipio": "25",
+        "distrito": "10"
+      }
+    },
+    {
+      "nombre": "San Juan Opico",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "24",
+      "municipio_nombre": "LA LIBERTAD CENTRO",
+      "distrito_codigo": "15",
+      "distrito_nombre": "San Juan Opico",
+      "id": "05-24-15",
+      "dte": {
+        "departamento": "05",
+        "municipio": "24",
+        "distrito": "15"
+      }
+    },
+    {
+      "nombre": "San Juan Talpa",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "23",
+      "municipio_nombre": "LA PAZ OESTE",
+      "distrito_codigo": "11",
+      "distrito_nombre": "San Juan Talpa",
+      "id": "08-23-11",
+      "dte": {
+        "departamento": "08",
+        "municipio": "23",
+        "distrito": "11"
+      }
+    },
+    {
+      "nombre": "San Juan Tepezontes",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "24",
+      "municipio_nombre": "LA PAZ CENTRO",
+      "distrito_codigo": "12",
+      "distrito_nombre": "San Juan Tepezontes",
+      "id": "08-24-12",
+      "dte": {
+        "departamento": "08",
+        "municipio": "24",
+        "distrito": "12"
+      }
+    },
+    {
+      "nombre": "San Julián",
+      "aliases": [],
+      "departamento_codigo": "03",
+      "departamento_nombre": "Sonsonate",
+      "municipio_codigo": "19",
+      "municipio_nombre": "SONSONATE ESTE",
+      "distrito_codigo": "12",
+      "distrito_nombre": "San Julián",
+      "id": "03-19-12",
+      "dte": {
+        "departamento": "03",
+        "municipio": "19",
+        "distrito": "12"
+      }
+    },
+    {
+      "nombre": "San Lorenzo",
+      "aliases": [],
+      "departamento_codigo": "01",
+      "departamento_nombre": "Ahuachapán",
+      "municipio_codigo": "13",
+      "municipio_nombre": "AHUACHAPAN NORTE",
+      "distrito_codigo": "09",
+      "distrito_nombre": "San Lorenzo",
+      "id": "01-13-09",
+      "dte": {
+        "departamento": "01",
+        "municipio": "13",
+        "distrito": "09"
+      }
+    },
+    {
+      "nombre": "San Lorenzo",
+      "aliases": [],
+      "departamento_codigo": "10",
+      "departamento_nombre": "San Vicente",
+      "municipio_codigo": "14",
+      "municipio_nombre": "SAN VICENTE NORTE",
+      "distrito_codigo": "08",
+      "distrito_nombre": "San Lorenzo",
+      "id": "10-14-08",
+      "dte": {
+        "departamento": "10",
+        "municipio": "14",
+        "distrito": "08"
+      }
+    },
+    {
+      "nombre": "San Luis del Carmen",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "29",
+      "distrito_nombre": "San Luis del Carmen",
+      "id": "04-36-29",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "29"
+      }
+    },
+    {
+      "nombre": "San Luis La Herradura",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "24",
+      "municipio_nombre": "LA PAZ CENTRO",
+      "distrito_codigo": "22",
+      "distrito_nombre": "San Luis La Herradura",
+      "id": "08-24-22",
+      "dte": {
+        "departamento": "08",
+        "municipio": "24",
+        "distrito": "22"
+      }
+    },
+    {
+      "nombre": "San Luis de la Reina",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "21",
+      "municipio_nombre": "SAN MIGUEL NORTE",
+      "distrito_codigo": "16",
+      "distrito_nombre": "San Luis de la Reina",
+      "id": "12-21-16",
+      "dte": {
+        "departamento": "12",
+        "municipio": "21",
+        "distrito": "16"
+      }
+    },
+    {
+      "nombre": "San Luis Talpa",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "23",
+      "municipio_nombre": "LA PAZ OESTE",
+      "distrito_codigo": "13",
+      "distrito_nombre": "San Luis Talpa",
+      "id": "08-23-13",
+      "dte": {
+        "departamento": "08",
+        "municipio": "23",
+        "distrito": "13"
+      }
+    },
+    {
+      "nombre": "San Marcos",
+      "aliases": [],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "24",
+      "municipio_nombre": "SAN SALVADOR SUR",
+      "distrito_codigo": "12",
+      "distrito_nombre": "San Marcos",
+      "id": "06-24-12",
+      "dte": {
+        "departamento": "06",
+        "municipio": "24",
+        "distrito": "12"
+      }
+    },
+    {
+      "nombre": "San Martín",
+      "aliases": [],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "22",
+      "municipio_nombre": "SAN SALVADOR ESTE",
+      "distrito_codigo": "13",
+      "distrito_nombre": "San Martín",
+      "id": "06-22-13",
+      "dte": {
+        "departamento": "06",
+        "municipio": "22",
+        "distrito": "13"
+      }
+    },
+    {
+      "nombre": "San Matías",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "23",
+      "municipio_nombre": "LA LIBERTAD NORTE",
+      "distrito_codigo": "16",
+      "distrito_nombre": "San Matías",
+      "id": "05-23-16",
+      "dte": {
+        "departamento": "05",
+        "municipio": "23",
+        "distrito": "16"
+      }
+    },
+    {
+      "nombre": "San Miguel",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "22",
+      "municipio_nombre": "SAN MIGUEL CENTRO",
+      "distrito_codigo": "17",
+      "distrito_nombre": "San Miguel",
+      "id": "12-22-17",
+      "dte": {
+        "departamento": "12",
+        "municipio": "22",
+        "distrito": "17"
+      }
+    },
+    {
+      "nombre": "San Miguel de Mercedes",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "30",
+      "distrito_nombre": "San Miguel de Mercedes",
+      "id": "04-36-30",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "30"
+      }
+    },
+    {
+      "nombre": "San Miguel Tepezontes",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "24",
+      "municipio_nombre": "LA PAZ CENTRO",
+      "distrito_codigo": "14",
+      "distrito_nombre": "San Miguel Tepezontes",
+      "id": "08-24-14",
+      "dte": {
+        "departamento": "08",
+        "municipio": "24",
+        "distrito": "14"
+      }
+    },
+    {
+      "nombre": "San Pablo Tacachico",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "23",
+      "municipio_nombre": "LA LIBERTAD NORTE",
+      "distrito_codigo": "17",
+      "distrito_nombre": "San Pablo Tacachico",
+      "id": "05-23-17",
+      "dte": {
+        "departamento": "05",
+        "municipio": "23",
+        "distrito": "17"
+      }
+    },
+    {
+      "nombre": "San Pedro Masahuat",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "23",
+      "municipio_nombre": "LA PAZ OESTE",
+      "distrito_codigo": "15",
+      "distrito_nombre": "San Pedro Masahuat",
+      "id": "08-23-15",
+      "dte": {
+        "departamento": "08",
+        "municipio": "23",
+        "distrito": "15"
+      }
+    },
+    {
+      "nombre": "San Pedro Nonualco",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "24",
+      "municipio_nombre": "LA PAZ CENTRO",
+      "distrito_codigo": "16",
+      "distrito_nombre": "San Pedro Nonualco",
+      "id": "08-24-16",
+      "dte": {
+        "departamento": "08",
+        "municipio": "24",
+        "distrito": "16"
+      }
+    },
+    {
+      "nombre": "San Pedro Perulapán",
+      "aliases": [],
+      "departamento_codigo": "07",
+      "departamento_nombre": "Cuscatlán",
+      "municipio_codigo": "17",
+      "municipio_nombre": "CUSCATLAN NORTE",
+      "distrito_codigo": "10",
+      "distrito_nombre": "San Pedro Perulapán",
+      "id": "07-17-10",
+      "dte": {
+        "departamento": "07",
+        "municipio": "17",
+        "distrito": "10"
+      }
+    },
+    {
+      "nombre": "San Pedro Puxtla",
+      "aliases": [],
+      "departamento_codigo": "01",
+      "departamento_nombre": "Ahuachapán",
+      "municipio_codigo": "15",
+      "municipio_nombre": "AHUACHAPAN SUR",
+      "distrito_codigo": "10",
+      "distrito_nombre": "San Pedro Puxtla",
+      "id": "01-15-10",
+      "dte": {
+        "departamento": "01",
+        "municipio": "15",
+        "distrito": "10"
+      }
+    },
+    {
+      "nombre": "San Rafael",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "35",
+      "municipio_nombre": "CHALATENANGO CENTRO",
+      "distrito_codigo": "31",
+      "distrito_nombre": "San Rafael",
+      "id": "04-35-31",
+      "dte": {
+        "departamento": "04",
+        "municipio": "35",
+        "distrito": "31"
+      }
+    },
+    {
+      "nombre": "San Rafael Cedros",
+      "aliases": [],
+      "departamento_codigo": "07",
+      "departamento_nombre": "Cuscatlán",
+      "municipio_codigo": "18",
+      "municipio_nombre": "CUSCATLAN SUR",
+      "distrito_codigo": "11",
+      "distrito_nombre": "San Rafael Cedros",
+      "id": "07-18-11",
+      "dte": {
+        "departamento": "07",
+        "municipio": "18",
+        "distrito": "11"
+      }
+    },
+    {
+      "nombre": "San Rafael Obrajuelo",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "25",
+      "municipio_nombre": "LA PAZ ESTE",
+      "distrito_codigo": "17",
+      "distrito_nombre": "San Rafael Obrajuelo",
+      "id": "08-25-17",
+      "dte": {
+        "departamento": "08",
+        "municipio": "25",
+        "distrito": "17"
+      }
+    },
+    {
+      "nombre": "San Rafael Oriente",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "23",
+      "municipio_nombre": "SAN MIGUEL OESTE",
+      "distrito_codigo": "18",
+      "distrito_nombre": "San Rafael Oriente",
+      "id": "12-23-18",
+      "dte": {
+        "departamento": "12",
+        "municipio": "23",
+        "distrito": "18"
+      }
+    },
+    {
+      "nombre": "San Ramón",
+      "aliases": [],
+      "departamento_codigo": "07",
+      "departamento_nombre": "Cuscatlán",
+      "municipio_codigo": "18",
+      "municipio_nombre": "CUSCATLAN SUR",
+      "distrito_codigo": "12",
+      "distrito_nombre": "San Ramón",
+      "id": "07-18-12",
+      "dte": {
+        "departamento": "07",
+        "municipio": "18",
+        "distrito": "12"
+      }
+    },
+    {
+      "nombre": "San Salvador",
+      "aliases": [
+        "San Salvador Capital",
+        "Distrito de San Salvador"
+      ],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "23",
+      "municipio_nombre": "SAN SALVADOR CENTRO",
+      "distrito_codigo": "14",
+      "distrito_nombre": "San Salvador",
+      "id": "06-23-14",
+      "dte": {
+        "departamento": "06",
+        "municipio": "23",
+        "distrito": "14"
+      }
+    },
+    {
+      "nombre": "San Sebastián",
+      "aliases": [],
+      "departamento_codigo": "10",
+      "departamento_nombre": "San Vicente",
+      "municipio_codigo": "14",
+      "municipio_nombre": "SAN VICENTE NORTE",
+      "distrito_codigo": "09",
+      "distrito_nombre": "San Sebastián",
+      "id": "10-14-09",
+      "dte": {
+        "departamento": "10",
+        "municipio": "14",
+        "distrito": "09"
+      }
+    },
+    {
+      "nombre": "San Sebastián Salitrillo",
+      "aliases": [],
+      "departamento_codigo": "02",
+      "departamento_nombre": "Santa Ana",
+      "municipio_codigo": "17",
+      "municipio_nombre": "SANTA ANA OESTE",
+      "distrito_codigo": "09",
+      "distrito_nombre": "San Sebastián Salitrillo",
+      "id": "02-17-09",
+      "dte": {
+        "departamento": "02",
+        "municipio": "17",
+        "distrito": "09"
+      }
+    },
+    {
+      "nombre": "San Simón",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "28",
+      "municipio_nombre": "MORAZAN SUR",
+      "distrito_codigo": "21",
+      "distrito_nombre": "San Simón",
+      "id": "13-28-21",
+      "dte": {
+        "departamento": "13",
+        "municipio": "28",
+        "distrito": "21"
+      }
+    },
+    {
+      "nombre": "San Vicente",
+      "aliases": [],
+      "departamento_codigo": "10",
+      "departamento_nombre": "San Vicente",
+      "municipio_codigo": "15",
+      "municipio_nombre": "SAN VICENTE SUR",
+      "distrito_codigo": "10",
+      "distrito_nombre": "San Vicente",
+      "id": "10-15-10",
+      "dte": {
+        "departamento": "10",
+        "municipio": "15",
+        "distrito": "10"
+      }
+    },
+    {
+      "nombre": "Santa Ana",
+      "aliases": [],
+      "departamento_codigo": "02",
+      "departamento_nombre": "Santa Ana",
+      "municipio_codigo": "15",
+      "municipio_nombre": "SANTA ANA CENTRO",
+      "distrito_codigo": "10",
+      "distrito_nombre": "Santa Ana",
+      "id": "02-15-10",
+      "dte": {
+        "departamento": "02",
+        "municipio": "15",
+        "distrito": "10"
+      }
+    },
+    {
+      "nombre": "Santa Catarina Masahuat",
+      "aliases": [],
+      "departamento_codigo": "03",
+      "departamento_nombre": "Sonsonate",
+      "municipio_codigo": "17",
+      "municipio_nombre": "SONSONATE NORTE",
+      "distrito_codigo": "13",
+      "distrito_nombre": "Santa Catarina Masahuat",
+      "id": "03-17-13",
+      "dte": {
+        "departamento": "03",
+        "municipio": "17",
+        "distrito": "13"
+      }
+    },
+    {
+      "nombre": "Santa Clara",
+      "aliases": [],
+      "departamento_codigo": "10",
+      "departamento_nombre": "San Vicente",
+      "municipio_codigo": "14",
+      "municipio_nombre": "SAN VICENTE NORTE",
+      "distrito_codigo": "04",
+      "distrito_nombre": "Santa Clara",
+      "id": "10-14-04",
+      "dte": {
+        "departamento": "10",
+        "municipio": "14",
+        "distrito": "04"
+      }
+    },
+    {
+      "nombre": "Santa Cruz Analquito",
+      "aliases": [],
+      "departamento_codigo": "07",
+      "departamento_nombre": "Cuscatlán",
+      "municipio_codigo": "18",
+      "municipio_nombre": "CUSCATLAN SUR",
+      "distrito_codigo": "13",
+      "distrito_nombre": "Santa Cruz Analquito",
+      "id": "07-18-13",
+      "dte": {
+        "departamento": "07",
+        "municipio": "18",
+        "distrito": "13"
+      }
+    },
+    {
+      "nombre": "Santa Cruz Michapa",
+      "aliases": [],
+      "departamento_codigo": "07",
+      "departamento_nombre": "Cuscatlán",
+      "municipio_codigo": "18",
+      "municipio_nombre": "CUSCATLAN SUR",
+      "distrito_codigo": "14",
+      "distrito_nombre": "Santa Cruz Michapa",
+      "id": "07-18-14",
+      "dte": {
+        "departamento": "07",
+        "municipio": "18",
+        "distrito": "14"
+      }
+    },
+    {
+      "nombre": "Santa Elena",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "25",
+      "municipio_nombre": "USULUTAN ESTE",
+      "distrito_codigo": "18",
+      "distrito_nombre": "Santa Elena",
+      "id": "11-25-18",
+      "dte": {
+        "departamento": "11",
+        "municipio": "25",
+        "distrito": "18"
+      }
+    },
+    {
+      "nombre": "Santa Isabel Ishuatán",
+      "aliases": [],
+      "departamento_codigo": "03",
+      "departamento_nombre": "Sonsonate",
+      "municipio_codigo": "19",
+      "municipio_nombre": "SONSONATE ESTE",
+      "distrito_codigo": "05",
+      "distrito_nombre": "Santa Isabel Ishuatán",
+      "id": "03-19-05",
+      "dte": {
+        "departamento": "03",
+        "municipio": "19",
+        "distrito": "05"
+      }
+    },
+    {
+      "nombre": "Santa María",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "25",
+      "municipio_nombre": "USULUTAN ESTE",
+      "distrito_codigo": "20",
+      "distrito_nombre": "Santa María",
+      "id": "11-25-20",
+      "dte": {
+        "departamento": "11",
+        "municipio": "25",
+        "distrito": "20"
+      }
+    },
+    {
+      "nombre": "Santa María Ostuma",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "24",
+      "municipio_nombre": "LA PAZ CENTRO",
+      "distrito_codigo": "18",
+      "distrito_nombre": "Santa María Ostuma",
+      "id": "08-24-18",
+      "dte": {
+        "departamento": "08",
+        "municipio": "24",
+        "distrito": "18"
+      }
+    },
+    {
+      "nombre": "Santa Rita",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "35",
+      "municipio_nombre": "CHALATENANGO CENTRO",
+      "distrito_codigo": "32",
+      "distrito_nombre": "Santa Rita",
+      "id": "04-35-32",
+      "dte": {
+        "departamento": "04",
+        "municipio": "35",
+        "distrito": "32"
+      }
+    },
+    {
+      "nombre": "Santa Rosa Guachipilín",
+      "aliases": [],
+      "departamento_codigo": "02",
+      "departamento_nombre": "Santa Ana",
+      "municipio_codigo": "14",
+      "municipio_nombre": "SANTA ANA NORTE",
+      "distrito_codigo": "11",
+      "distrito_nombre": "Santa Rosa Guachipilín",
+      "id": "02-14-11",
+      "dte": {
+        "departamento": "02",
+        "municipio": "14",
+        "distrito": "11"
+      }
+    },
+    {
+      "nombre": "Santa Rosa de Lima",
+      "aliases": [],
+      "departamento_codigo": "14",
+      "departamento_nombre": "La Unión",
+      "municipio_codigo": "19",
+      "municipio_nombre": "LA UNION NORTE",
+      "distrito_codigo": "16",
+      "distrito_nombre": "Santa Rosa de Lima",
+      "id": "14-19-16",
+      "dte": {
+        "departamento": "14",
+        "municipio": "19",
+        "distrito": "16"
+      }
+    },
+    {
+      "nombre": "Santa Tecla",
+      "aliases": [
+        "Nueva San Salvador",
+        "Santa Tecla (Nueva San Salvador)"
+      ],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "28",
+      "municipio_nombre": "LA LIBERTAD SUR",
+      "distrito_codigo": "11",
+      "distrito_nombre": "Santa Tecla",
+      "id": "05-28-11",
+      "dte": {
+        "departamento": "05",
+        "municipio": "28",
+        "distrito": "11"
+      }
+    },
+    {
+      "nombre": "Santiago de la Frontera",
+      "aliases": [],
+      "departamento_codigo": "02",
+      "departamento_nombre": "Santa Ana",
+      "municipio_codigo": "17",
+      "municipio_nombre": "SANTA ANA OESTE",
+      "distrito_codigo": "12",
+      "distrito_nombre": "Santiago de la Frontera",
+      "id": "02-17-12",
+      "dte": {
+        "departamento": "02",
+        "municipio": "17",
+        "distrito": "12"
+      }
+    },
+    {
+      "nombre": "Santiago de María",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "24",
+      "municipio_nombre": "USULUTAN NORTE",
+      "distrito_codigo": "21",
+      "distrito_nombre": "Santiago de María",
+      "id": "11-24-21",
+      "dte": {
+        "departamento": "11",
+        "municipio": "24",
+        "distrito": "21"
+      }
+    },
+    {
+      "nombre": "Santiago Nonualco",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "24",
+      "municipio_nombre": "LA PAZ CENTRO",
+      "distrito_codigo": "19",
+      "distrito_nombre": "Santiago Nonualco",
+      "id": "08-24-19",
+      "dte": {
+        "departamento": "08",
+        "municipio": "24",
+        "distrito": "19"
+      }
+    },
+    {
+      "nombre": "Santiago Texacuangos",
+      "aliases": [],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "24",
+      "municipio_nombre": "SAN SALVADOR SUR",
+      "distrito_codigo": "15",
+      "distrito_nombre": "Santiago Texacuangos",
+      "id": "06-24-15",
+      "dte": {
+        "departamento": "06",
+        "municipio": "24",
+        "distrito": "15"
+      }
+    },
+    {
+      "nombre": "Santo Domingo",
+      "aliases": [],
+      "departamento_codigo": "10",
+      "departamento_nombre": "San Vicente",
+      "municipio_codigo": "14",
+      "municipio_nombre": "SAN VICENTE NORTE",
+      "distrito_codigo": "05",
+      "distrito_nombre": "Santo Domingo",
+      "id": "10-14-05",
+      "dte": {
+        "departamento": "10",
+        "municipio": "14",
+        "distrito": "05"
+      }
+    },
+    {
+      "nombre": "Santo Domingo de Guzmán",
+      "aliases": [],
+      "departamento_codigo": "03",
+      "departamento_nombre": "Sonsonate",
+      "municipio_codigo": "18",
+      "municipio_nombre": "SONSONATE CENTRO",
+      "distrito_codigo": "14",
+      "distrito_nombre": "Santo Domingo de Guzmán",
+      "id": "03-18-14",
+      "dte": {
+        "departamento": "03",
+        "municipio": "18",
+        "distrito": "14"
+      }
+    },
+    {
+      "nombre": "Santo Tomás",
+      "aliases": [],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "24",
+      "municipio_nombre": "SAN SALVADOR SUR",
+      "distrito_codigo": "16",
+      "distrito_nombre": "Santo Tomás",
+      "id": "06-24-16",
+      "dte": {
+        "departamento": "06",
+        "municipio": "24",
+        "distrito": "16"
+      }
+    },
+    {
+      "nombre": "El Sauce",
+      "aliases": [],
+      "departamento_codigo": "14",
+      "departamento_nombre": "La Unión",
+      "municipio_codigo": "19",
+      "municipio_nombre": "LA UNION NORTE",
+      "distrito_codigo": "06",
+      "distrito_nombre": "El Sauce",
+      "id": "14-19-06",
+      "dte": {
+        "departamento": "14",
+        "municipio": "19",
+        "distrito": "06"
+      }
+    },
+    {
+      "nombre": "Sensembra",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "28",
+      "municipio_nombre": "MORAZAN SUR",
+      "distrito_codigo": "22",
+      "distrito_nombre": "Sensembra",
+      "id": "13-28-22",
+      "dte": {
+        "departamento": "13",
+        "municipio": "28",
+        "distrito": "22"
+      }
+    },
+    {
+      "nombre": "Sensuntepeque",
+      "aliases": [],
+      "departamento_codigo": "09",
+      "departamento_nombre": "Cabañas",
+      "municipio_codigo": "11",
+      "municipio_nombre": "CABAÑAS ESTE",
+      "distrito_codigo": "06",
+      "distrito_nombre": "Sensuntepeque",
+      "id": "09-11-06",
+      "dte": {
+        "departamento": "09",
+        "municipio": "11",
+        "distrito": "06"
+      }
+    },
+    {
+      "nombre": "Sesori",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "21",
+      "municipio_nombre": "SAN MIGUEL NORTE",
+      "distrito_codigo": "19",
+      "distrito_nombre": "Sesori",
+      "id": "12-21-19",
+      "dte": {
+        "departamento": "12",
+        "municipio": "21",
+        "distrito": "19"
+      }
+    },
+    {
+      "nombre": "Sociedad",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "28",
+      "municipio_nombre": "MORAZAN SUR",
+      "distrito_codigo": "23",
+      "distrito_nombre": "Sociedad",
+      "id": "13-28-23",
+      "dte": {
+        "departamento": "13",
+        "municipio": "28",
+        "distrito": "23"
+      }
+    },
+    {
+      "nombre": "Sonsonate",
+      "aliases": [],
+      "departamento_codigo": "03",
+      "departamento_nombre": "Sonsonate",
+      "municipio_codigo": "18",
+      "municipio_nombre": "SONSONATE CENTRO",
+      "distrito_codigo": "15",
+      "distrito_nombre": "Sonsonate",
+      "id": "03-18-15",
+      "dte": {
+        "departamento": "03",
+        "municipio": "18",
+        "distrito": "15"
+      }
+    },
+    {
+      "nombre": "Sonzacate",
+      "aliases": [],
+      "departamento_codigo": "03",
+      "departamento_nombre": "Sonsonate",
+      "municipio_codigo": "18",
+      "municipio_nombre": "SONSONATE CENTRO",
+      "distrito_codigo": "16",
+      "distrito_nombre": "Sonzacate",
+      "id": "03-18-16",
+      "dte": {
+        "departamento": "03",
+        "municipio": "18",
+        "distrito": "16"
+      }
+    },
+    {
+      "nombre": "Soyapango",
+      "aliases": [],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "22",
+      "municipio_nombre": "SAN SALVADOR ESTE",
+      "distrito_codigo": "17",
+      "distrito_nombre": "Soyapango",
+      "id": "06-22-17",
+      "dte": {
+        "departamento": "06",
+        "municipio": "22",
+        "distrito": "17"
+      }
+    },
+    {
+      "nombre": "Suchitoto",
+      "aliases": [],
+      "departamento_codigo": "07",
+      "departamento_nombre": "Cuscatlán",
+      "municipio_codigo": "17",
+      "municipio_nombre": "CUSCATLAN NORTE",
+      "distrito_codigo": "15",
+      "distrito_nombre": "Suchitoto",
+      "id": "07-17-15",
+      "dte": {
+        "departamento": "07",
+        "municipio": "17",
+        "distrito": "15"
+      }
+    },
+    {
+      "nombre": "Tacuba",
+      "aliases": [],
+      "departamento_codigo": "01",
+      "departamento_nombre": "Ahuachapán",
+      "municipio_codigo": "14",
+      "municipio_nombre": "AHUACHAPAN CENTRO",
+      "distrito_codigo": "11",
+      "distrito_nombre": "Tacuba",
+      "id": "01-14-11",
+      "dte": {
+        "departamento": "01",
+        "municipio": "14",
+        "distrito": "11"
+      }
+    },
+    {
+      "nombre": "Talnique",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "25",
+      "municipio_nombre": "LA LIBERTAD OESTE",
+      "distrito_codigo": "19",
+      "distrito_nombre": "Talnique",
+      "id": "05-25-19",
+      "dte": {
+        "departamento": "05",
+        "municipio": "25",
+        "distrito": "19"
+      }
+    },
+    {
+      "nombre": "Tamanique",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "27",
+      "municipio_nombre": "LA LIBERTAD COSTA",
+      "distrito_codigo": "18",
+      "distrito_nombre": "Tamanique",
+      "id": "05-27-18",
+      "dte": {
+        "departamento": "05",
+        "municipio": "27",
+        "distrito": "18"
+      }
+    },
+    {
+      "nombre": "Tapalhuaca",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "23",
+      "municipio_nombre": "LA PAZ OESTE",
+      "distrito_codigo": "20",
+      "distrito_nombre": "Tapalhuaca",
+      "id": "08-23-20",
+      "dte": {
+        "departamento": "08",
+        "municipio": "23",
+        "distrito": "20"
+      }
+    },
+    {
+      "nombre": "Tecapán",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "25",
+      "municipio_nombre": "USULUTAN ESTE",
+      "distrito_codigo": "22",
+      "distrito_nombre": "Tecapán",
+      "id": "11-25-22",
+      "dte": {
+        "departamento": "11",
+        "municipio": "25",
+        "distrito": "22"
+      }
+    },
+    {
+      "nombre": "Tecoluca",
+      "aliases": [],
+      "departamento_codigo": "10",
+      "departamento_nombre": "San Vicente",
+      "municipio_codigo": "15",
+      "municipio_nombre": "SAN VICENTE SUR",
+      "distrito_codigo": "11",
+      "distrito_nombre": "Tecoluca",
+      "id": "10-15-11",
+      "dte": {
+        "departamento": "10",
+        "municipio": "15",
+        "distrito": "11"
+      }
+    },
+    {
+      "nombre": "Tejutepeque",
+      "aliases": [],
+      "departamento_codigo": "09",
+      "departamento_nombre": "Cabañas",
+      "municipio_codigo": "10",
+      "municipio_nombre": "CABAÑAS OESTE",
+      "distrito_codigo": "07",
+      "distrito_nombre": "Tejutepeque",
+      "id": "09-10-07",
+      "dte": {
+        "departamento": "09",
+        "municipio": "10",
+        "distrito": "07"
+      }
+    },
+    {
+      "nombre": "Tejutla",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "35",
+      "municipio_nombre": "CHALATENANGO CENTRO",
+      "distrito_codigo": "33",
+      "distrito_nombre": "Tejutla",
+      "id": "04-35-33",
+      "dte": {
+        "departamento": "04",
+        "municipio": "35",
+        "distrito": "33"
+      }
+    },
+    {
+      "nombre": "Tenancingo",
+      "aliases": [],
+      "departamento_codigo": "07",
+      "departamento_nombre": "Cuscatlán",
+      "municipio_codigo": "18",
+      "municipio_nombre": "CUSCATLAN SUR",
+      "distrito_codigo": "16",
+      "distrito_nombre": "Tenancingo",
+      "id": "07-18-16",
+      "dte": {
+        "departamento": "07",
+        "municipio": "18",
+        "distrito": "16"
+      }
+    },
+    {
+      "nombre": "Teotepeque",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "27",
+      "municipio_nombre": "LA LIBERTAD COSTA",
+      "distrito_codigo": "20",
+      "distrito_nombre": "Teotepeque",
+      "id": "05-27-20",
+      "dte": {
+        "departamento": "05",
+        "municipio": "27",
+        "distrito": "20"
+      }
+    },
+    {
+      "nombre": "Tepecoyo",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "25",
+      "municipio_nombre": "LA LIBERTAD OESTE",
+      "distrito_codigo": "21",
+      "distrito_nombre": "Tepecoyo",
+      "id": "05-25-21",
+      "dte": {
+        "departamento": "05",
+        "municipio": "25",
+        "distrito": "21"
+      }
+    },
+    {
+      "nombre": "Tepetitán",
+      "aliases": [],
+      "departamento_codigo": "10",
+      "departamento_nombre": "San Vicente",
+      "municipio_codigo": "15",
+      "municipio_nombre": "SAN VICENTE SUR",
+      "distrito_codigo": "12",
+      "distrito_nombre": "Tepetitán",
+      "id": "10-15-12",
+      "dte": {
+        "departamento": "10",
+        "municipio": "15",
+        "distrito": "12"
+      }
+    },
+    {
+      "nombre": "Texistepeque",
+      "aliases": [],
+      "departamento_codigo": "02",
+      "departamento_nombre": "Santa Ana",
+      "municipio_codigo": "14",
+      "municipio_nombre": "SANTA ANA NORTE",
+      "distrito_codigo": "13",
+      "distrito_nombre": "Texistepeque",
+      "id": "02-14-13",
+      "dte": {
+        "departamento": "02",
+        "municipio": "14",
+        "distrito": "13"
+      }
+    },
+    {
+      "nombre": "Tonacatepeque",
+      "aliases": [],
+      "departamento_codigo": "06",
+      "departamento_nombre": "San Salvador",
+      "municipio_codigo": "22",
+      "municipio_nombre": "SAN SALVADOR ESTE",
+      "distrito_codigo": "18",
+      "distrito_nombre": "Tonacatepeque",
+      "id": "06-22-18",
+      "dte": {
+        "departamento": "06",
+        "municipio": "22",
+        "distrito": "18"
+      }
+    },
+    {
+      "nombre": "Torola",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "27",
+      "municipio_nombre": "MORAZAN NORTE",
+      "distrito_codigo": "24",
+      "distrito_nombre": "Torola",
+      "id": "13-27-24",
+      "dte": {
+        "departamento": "13",
+        "municipio": "27",
+        "distrito": "24"
+      }
+    },
+    {
+      "nombre": "El Tránsito",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "23",
+      "municipio_nombre": "SAN MIGUEL OESTE",
+      "distrito_codigo": "07",
+      "distrito_nombre": "El Tránsito",
+      "id": "12-23-07",
+      "dte": {
+        "departamento": "12",
+        "municipio": "23",
+        "distrito": "07"
+      }
+    },
+    {
+      "nombre": "El Triunfo",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "24",
+      "municipio_nombre": "USULUTAN NORTE",
+      "distrito_codigo": "05",
+      "distrito_nombre": "El Triunfo",
+      "id": "11-24-05",
+      "dte": {
+        "departamento": "11",
+        "municipio": "24",
+        "distrito": "05"
+      }
+    },
+    {
+      "nombre": "Turín",
+      "aliases": [],
+      "departamento_codigo": "01",
+      "departamento_nombre": "Ahuachapán",
+      "municipio_codigo": "13",
+      "municipio_nombre": "AHUACHAPAN NORTE",
+      "distrito_codigo": "12",
+      "distrito_nombre": "Turín",
+      "id": "01-13-12",
+      "dte": {
+        "departamento": "01",
+        "municipio": "13",
+        "distrito": "12"
+      }
+    },
+    {
+      "nombre": "Uluazapa",
+      "aliases": [],
+      "departamento_codigo": "12",
+      "departamento_nombre": "San Miguel",
+      "municipio_codigo": "22",
+      "municipio_nombre": "SAN MIGUEL CENTRO",
+      "distrito_codigo": "20",
+      "distrito_nombre": "Uluazapa",
+      "id": "12-22-20",
+      "dte": {
+        "departamento": "12",
+        "municipio": "22",
+        "distrito": "20"
+      }
+    },
+    {
+      "nombre": "La Unión",
+      "aliases": [],
+      "departamento_codigo": "14",
+      "departamento_nombre": "La Unión",
+      "municipio_codigo": "20",
+      "municipio_nombre": "LA UNION SUR",
+      "distrito_codigo": "08",
+      "distrito_nombre": "La Unión",
+      "id": "14-20-08",
+      "dte": {
+        "departamento": "14",
+        "municipio": "20",
+        "distrito": "08"
+      }
+    },
+    {
+      "nombre": "Usulután",
+      "aliases": [],
+      "departamento_codigo": "11",
+      "departamento_nombre": "Usulután",
+      "municipio_codigo": "25",
+      "municipio_nombre": "USULUTAN ESTE",
+      "distrito_codigo": "23",
+      "distrito_nombre": "Usulután",
+      "id": "11-25-23",
+      "dte": {
+        "departamento": "11",
+        "municipio": "25",
+        "distrito": "23"
+      }
+    },
+    {
+      "nombre": "Verapaz",
+      "aliases": [],
+      "departamento_codigo": "10",
+      "departamento_nombre": "San Vicente",
+      "municipio_codigo": "15",
+      "municipio_nombre": "SAN VICENTE SUR",
+      "distrito_codigo": "13",
+      "distrito_nombre": "Verapaz",
+      "id": "10-15-13",
+      "dte": {
+        "departamento": "10",
+        "municipio": "15",
+        "distrito": "13"
+      }
+    },
+    {
+      "nombre": "Victoria",
+      "aliases": [],
+      "departamento_codigo": "09",
+      "departamento_nombre": "Cabañas",
+      "municipio_codigo": "11",
+      "municipio_nombre": "CABAÑAS ESTE",
+      "distrito_codigo": "08",
+      "distrito_nombre": "Victoria",
+      "id": "09-11-08",
+      "dte": {
+        "departamento": "09",
+        "municipio": "11",
+        "distrito": "08"
+      }
+    },
+    {
+      "nombre": "Las Vueltas",
+      "aliases": [],
+      "departamento_codigo": "04",
+      "departamento_nombre": "Chalatenango",
+      "municipio_codigo": "36",
+      "municipio_nombre": "CHALATENANGO SUR",
+      "distrito_codigo": "14",
+      "distrito_nombre": "Las Vueltas",
+      "id": "04-36-14",
+      "dte": {
+        "departamento": "04",
+        "municipio": "36",
+        "distrito": "14"
+      }
+    },
+    {
+      "nombre": "Yamabal",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "28",
+      "municipio_nombre": "MORAZAN SUR",
+      "distrito_codigo": "25",
+      "distrito_nombre": "Yamabal",
+      "id": "13-28-25",
+      "dte": {
+        "departamento": "13",
+        "municipio": "28",
+        "distrito": "25"
+      }
+    },
+    {
+      "nombre": "Yayantique",
+      "aliases": [],
+      "departamento_codigo": "14",
+      "departamento_nombre": "La Unión",
+      "municipio_codigo": "20",
+      "municipio_nombre": "LA UNION SUR",
+      "distrito_codigo": "17",
+      "distrito_nombre": "Yayantique",
+      "id": "14-20-17",
+      "dte": {
+        "departamento": "14",
+        "municipio": "20",
+        "distrito": "17"
+      }
+    },
+    {
+      "nombre": "Yoloaiquín",
+      "aliases": [],
+      "departamento_codigo": "13",
+      "departamento_nombre": "Morazán",
+      "municipio_codigo": "28",
+      "municipio_nombre": "MORAZAN SUR",
+      "distrito_codigo": "26",
+      "distrito_nombre": "Yoloaiquín",
+      "id": "13-28-26",
+      "dte": {
+        "departamento": "13",
+        "municipio": "28",
+        "distrito": "26"
+      }
+    },
+    {
+      "nombre": "Yucuaiquín",
+      "aliases": [],
+      "departamento_codigo": "14",
+      "departamento_nombre": "La Unión",
+      "municipio_codigo": "20",
+      "municipio_nombre": "LA UNION SUR",
+      "distrito_codigo": "18",
+      "distrito_nombre": "Yucuaiquín",
+      "id": "14-20-18",
+      "dte": {
+        "departamento": "14",
+        "municipio": "20",
+        "distrito": "18"
+      }
+    },
+    {
+      "nombre": "Zacatecoluca",
+      "aliases": [],
+      "departamento_codigo": "08",
+      "departamento_nombre": "La Paz",
+      "municipio_codigo": "25",
+      "municipio_nombre": "LA PAZ ESTE",
+      "distrito_codigo": "21",
+      "distrito_nombre": "Zacatecoluca",
+      "id": "08-25-21",
+      "dte": {
+        "departamento": "08",
+        "municipio": "25",
+        "distrito": "21"
+      }
+    },
+    {
+      "nombre": "Zaragoza",
+      "aliases": [],
+      "departamento_codigo": "05",
+      "departamento_nombre": "La Libertad",
+      "municipio_codigo": "26",
+      "municipio_nombre": "LA LIBERTAD ESTE",
+      "distrito_codigo": "22",
+      "distrito_nombre": "Zaragoza",
+      "id": "05-26-22",
+      "dte": {
+        "departamento": "05",
+        "municipio": "26",
+        "distrito": "22"
+      }
+    }
+  ]
+}
